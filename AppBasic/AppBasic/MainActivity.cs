@@ -28,7 +28,7 @@ namespace AppBasic
         private void OnBtnLoginClick(object sender, EventArgs e)
         {
             //Starte nächste Activity
-            var actMap = new Intent(this, typeof(ActivityMap));
+            Intent actMap = new Intent(this, typeof(ActivityMap));
             actMap.PutExtra("MyData", "Data from MainActivity");
             StartActivity(actMap);
 

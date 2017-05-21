@@ -15,12 +15,16 @@ namespace AppBasic
     [Activity(Label = "ActivityMap")]
     public class ActivityMap : Activity
     {
+        TextView tvUebergeben;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
             // Create your application here
             SetContentView(Resource.Layout.Map);
+            tvUebergeben = (TextView)FindViewById(Resource.Id.textViewFromMain);
+            String text = Intent.GetStringExtra("MyData") ?? "Data not available";
+            tvUebergeben.Text = text;
         }
     }
 }
