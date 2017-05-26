@@ -15,5 +15,17 @@ namespace AppBasic
         public int KaempfeGesamt { get => kaempfeGesamt; set => kaempfeGesamt = value; }
         public int KaempfeGewonnen { get => kaempfeGewonnen; set => kaempfeGewonnen = value; }
         public DateTime Spielzeit { get => spielzeit; set => spielzeit = value; }
+        public int LogdatenId { get => logdatenId; set => logdatenId = value; }
+
+        public static Logdaten getTestLogdaten()
+        {
+            Logdaten l = new Logdaten();
+            l.KaempfeGesamt = 10;
+            l.KaempfeGewonnen = 5;
+            l.LogdatenId = 1;
+            l.Spielzeit = DateTime.Now;
+
+            return l;
+        }
     }
 }

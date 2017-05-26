@@ -3,6 +3,7 @@ using Android.Widget;
 using Android.OS;
 using System;
 using Android.Content;
+using Newtonsoft.Json;
 
 namespace AppBasic
 {
@@ -12,6 +13,9 @@ namespace AppBasic
         EditText etName;
         EditText stPw;
         Button btnLogin;
+        Button btnRegist;
+
+        Spieler spieler;
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -22,7 +26,17 @@ namespace AppBasic
             etName = (EditText)FindViewById(Resource.Id.editTextName);
             stPw = (EditText)FindViewById(Resource.Id.editTextPassword);
             btnLogin = (Button)FindViewById(Resource.Id.buttonLogin);
+            btnRegist = (Button)FindViewById(Resource.Id.buttonRegist);
             btnLogin.Click += OnBtnLoginClick;
+            btnRegist.Click += OnBtnRegistClick;
+            //Testspieler einfügen 
+            spieler = Spieler.getTestSpieler();
+            spieler.Monster.Add(Monster.getTestMonster());
+        }
+
+        private void OnBtnRegistClick(object sender, EventArgs e)
+        {
+            
         }
 
         private void OnBtnLoginClick(object sender, EventArgs e)
@@ -30,12 +44,13 @@ namespace AppBasic
             //Starte nächste Activity
 
             Intent actMap = new Intent(this, typeof(ActivityMap));
-            actMap.PutExtra("MyData", "Data from MainActivity");
+            
+            //Übergabe Spieler
+            actMap.PutExtra("spieler", JsonConvert.SerializeObject(spieler));
             StartActivity(actMap);
-
-
-
         }
+
+        
     }
 }
 

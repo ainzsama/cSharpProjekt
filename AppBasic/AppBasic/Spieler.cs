@@ -16,12 +16,28 @@ namespace AppBasic
     {
         private int spielerId;
         private String name;
-        private List<Monster> monster = new List<Monster>();
+        private List<Monster> monster;
         private Logdaten logdaten;
+
+        public Spieler()
+        {
+            monster = new List<AppBasic.Monster>();
+        }
 
         public string Name { get => name; set => name = value; }
         public Logdaten Logdaten { get => logdaten; set => logdaten = value; }
         public List<Monster> Monster { get => monster; set => monster = value; }
         public int SpielerId { get => spielerId; set => spielerId = value; }
+
+        public static Spieler getTestSpieler()
+        {
+            Spieler s = new Spieler();
+            s.SpielerId = 1;
+            s.Name = "Test";
+            s.Logdaten = Logdaten.getTestLogdaten();
+            
+            return s;
+
+        }
     }
 }

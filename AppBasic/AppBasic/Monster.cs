@@ -25,5 +25,17 @@ namespace AppBasic
         public string Name { get => name; set => name = value; }
         public int MonsterId { get => monsterId; set => monsterId = value; }
         public string Nickname { get => nickname; set => nickname = value; }
+
+        public static Monster getTestMonster()
+        {
+            Monster m = new Monster();
+            m.MonsterId = 1;
+            m.Hp = 100;
+            m.atk = 10;
+            m.Name = "test";
+            m.Nickname = "testNic";
+
+            return m;
+        }
     }
 }

@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Newtonsoft.Json;
 
 namespace AppBasic
 {
@@ -16,6 +17,8 @@ namespace AppBasic
     public class ActivityMap : Activity
     {
         TextView tvUebergeben;
+
+        Spieler spieler;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -23,8 +26,25 @@ namespace AppBasic
             // Create your application here
             SetContentView(Resource.Layout.Map);
             tvUebergeben = (TextView)FindViewById(Resource.Id.textViewFromMain);
-            String text = Intent.GetStringExtra("MyData") ?? "Data not available";
-            tvUebergeben.Text = text;
+
+            //Entgegennehmen Spieler
+            spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler"));
+
+            tvUebergeben.Text = spieler.Name;
+        }
+
+
+        private void starteKampf()
+        {
+            Intent actKampf = new Intent(this, typeof(ActivityKampf));
+            //Übergabe Spieler
+            actKampf.PutExtra("spieler", JsonConvert.SerializeObject(spieler));
+            //Übergabe Gegner
+            actKampf.PutExtra("gegner", JsonConvert.SerializeObject(Monster.getTestMonster()));
+            StartActivity(actKampf);
         }
     }
+
+
+
 }
