@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="100">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        android:src="@drawable/IconProjekt" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+        <TextView
+            android:text="Name"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/textViewName"
+            android:gravity="center"
+            android:layout_marginBottom="10dp" />
+        <TextView
+            android:text="Hp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/textViewHp"
+            android:gravity="center"
+            android:layout_marginBottom="10dp" />
+        <TextView
+            android:text="Angriff"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/textViewAtk"
+            android:gravity="center"
+            android:layout_marginBottom="10dp" />
+    </LinearLayout>
+</LinearLayout>

@@ -30,7 +30,7 @@ namespace AppBasic
 {
     [Activity(Label = "ActivityMap")]
     public class ActivityMap : Activity, IOnMapReadyCallback, GoogleApiClient.IConnectionCallbacks, 
-        GoogleApiClient.IOnConnectionFailedListener, Android.Gms.Location.ILocationListener
+        GoogleApiClient.IOnConnectionFailedListener, Android.Gms.Location.ILocationListener, Android.Gms.Maps.GoogleMap.IInfoWindowAdapter
     {
         private readonly string[] PermissionsLocation = { Manifest.Permission.AccessCoarseLocation, Manifest.Permission.AccessFineLocation };
         const int RequestLocationId = 0;
@@ -82,6 +82,7 @@ namespace AppBasic
                 Toast.MakeText(this, "Google Play Services nicht installiert", ToastLength.Long).Show();
 
             }
+            
 
             
         }
@@ -165,8 +166,11 @@ namespace AppBasic
         public void OnMapReady(GoogleMap googleMap)
         {
             mMap = googleMap;
+            mMap.SetInfoWindowAdapter(this);
            try
             {
+                MarkerOptions mo = new MarkerOptions();
+                
                 mMap.MyLocationEnabled = true;
                 mMap.AddMarker(new MarkerOptions().SetPosition(new LatLng(mMap.MyLocation.Latitude, mMap.MyLocation.Longitude)));
             }
@@ -207,6 +211,18 @@ namespace AppBasic
 
             // You must implement this to implement the Android.Gms.Locations.ILocationListener Interface
             Log.Debug("LocationClient", "Location updated");
+        }
+
+        public View GetInfoContents(Marker marker)
+        {
+            return null;
+        }
+
+        public View GetInfoWindow(Marker marker)
+        {
+            View view = LayoutInflater.Inflate(Resource.Layout.MonsterInfo, null, false);
+
+            return view;
         }
     }
 }
