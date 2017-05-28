@@ -3,11 +3,17 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="25px"
-    android:minHeight="25px">
-    <TextView
-        android:textAppearance="?android:attr/textAppearanceLarge"
+    android:weightSum="100">
+    <fragment
+        android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewFromMain" />
+        android:id="@+id/map"
+        android:layout_weight="90"
+        android:layout_height="0dp" />
+    <Button
+        android:text="Übersicht"
+        android:layout_width="match_parent"
+        android:id="@+id/buttonUebersicht"
+        android:layout_weight="10"
+        android:layout_height="0dp" />
 </LinearLayout>
