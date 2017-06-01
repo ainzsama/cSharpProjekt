@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Android.Gms.Maps.Model;
 
 namespace AppBasic
 {
@@ -19,12 +20,14 @@ namespace AppBasic
         private int atk;
         private String name;
         private String nickname;
+        private Marker marker;
 
         public int Hp { get => hp; set => hp = value; }
         public int Atk { get => atk; set => atk = value; }
         public string Name { get => name; set => name = value; }
         public int MonsterId { get => monsterId; set => monsterId = value; }
         public string Nickname { get => nickname; set => nickname = value; }
+        public Marker Marker { get => marker; set => marker = value; }
 
         public static Monster getTestMonster()
         {

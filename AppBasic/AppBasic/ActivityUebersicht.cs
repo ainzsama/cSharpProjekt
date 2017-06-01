@@ -58,7 +58,6 @@ namespace AppBasic
         public SamplePagerAdapter(Android.Support.V4.App.FragmentManager fragManager) : base(fragManager)
         {
             mFragmentHolder = new List<Android.Support.V4.App.Fragment>();
-            mFragmentHolder.Add(new FragmentMap());
             mFragmentHolder.Add(new FragmentMonster());
             mFragmentHolder.Add(new FragmentStats());
         }
@@ -69,22 +68,7 @@ namespace AppBasic
             return mFragmentHolder[position];
         }
     }
-    public class FragmentMap : Android.Support.V4.App.Fragment
-    {
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
-            var view = inflater.Inflate(Resource.Layout.FragMapLayout, container, false);
-
-
-
-            return view;
-        }
-
-        public override string ToString() //Called on line 156 in SlidingTabScrollView
-        {
-            return "Map";
-        }
-    }
+  
 
     public class FragmentMonster : Android.Support.V4.App.Fragment
     {

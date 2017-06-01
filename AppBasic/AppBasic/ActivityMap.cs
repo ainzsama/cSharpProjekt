@@ -29,8 +29,7 @@ using AlertDialog = Android.Support.V7.App.AlertDialog;
 namespace AppBasic
 {
     [Activity(Label = "ActivityMap")]
-    public class ActivityMap : Activity, IOnMapReadyCallback, GoogleApiClient.IConnectionCallbacks, 
-        GoogleApiClient.IOnConnectionFailedListener, Android.Gms.Location.ILocationListener, Android.Gms.Maps.GoogleMap.IInfoWindowAdapter
+    public class ActivityMap : Activity, IOnMapReadyCallback, GoogleApiClient.IConnectionCallbacks, GoogleApiClient.IOnConnectionFailedListener, Android.Gms.Location.ILocationListener, Android.Gms.Maps.GoogleMap.IInfoWindowAdapter
     {
         private readonly string[] PermissionsLocation = { Manifest.Permission.AccessCoarseLocation, Manifest.Permission.AccessFineLocation };
         const int RequestLocationId = 0;
@@ -40,13 +39,14 @@ namespace AppBasic
         private LocationRequest locRequest;
 
         private GoogleMap mMap;
-        private MarkerOptions spielerOptions;
+
 
         private Spieler spieler;
         private Button btnUebersicht;
 
         private bool _isGooglePlayServicesInstalled;
 
+        private List<Monster> activeMonsters;
 
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -63,9 +63,11 @@ namespace AppBasic
 
             // Entgegennehmen Spieler
             spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler"));
+            activeMonsters = new List<Monster>();
 
-            spielerOptions = new MarkerOptions();
-            spielerOptions.SetTitle("Spieler");
+
+            
+
             SetUpMap();
 
             _isGooglePlayServicesInstalled = IsGooglePlayServicesInstalled();
@@ -82,42 +84,40 @@ namespace AppBasic
                 Toast.MakeText(this, "Google Play Services nicht installiert", ToastLength.Long).Show();
 
             }
-            
 
             
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
         {
-            switch(requestCode)
+            switch (requestCode)
             {
                 case (RequestLocationId):
                     {
                         if (grantResults[0] == Permission.Granted)
                         {
                             mMap.MyLocationEnabled = true;
-                            mMap.AddMarker(new MarkerOptions().SetPosition(new LatLng(mMap.MyLocation.Latitude, mMap.MyLocation.Longitude)));
+
                         }
                     }
                     break;
             }
-            
+
         }
-        private bool IsGooglePlayServicesInstalled()
+
+        private void centerMap(Location loc)
         {
-            int queryResult = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
-            if (queryResult == ConnectionResult.Success) return true;
-
-            if(GoogleApiAvailability.Instance.IsUserResolvableError(queryResult))
+            if (mMap != null)
             {
-                string errorString = GoogleApiAvailability.Instance.GetErrorString(queryResult);
-                Log.Error("ActivityMap", "Google Play Services Error: {0} - {1}", queryResult, errorString);
+                CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
+                builder.Target(new LatLng(loc.Latitude, loc.Longitude));
+                builder.Zoom(17);
+                CameraPosition camPos = builder.Build();
+
+                mMap.MoveCamera(CameraUpdateFactory.NewCameraPosition(camPos));
+                
             }
-            return false;
-     
         }
-
-
         protected override void OnResume()
         {
             base.OnResume();
@@ -129,8 +129,9 @@ namespace AppBasic
                 Location location = LocationServices.FusedLocationApi.GetLastLocation(apiClient);
                 if (location != null)
                 {
-                    mMap.AddMarker(new MarkerOptions().SetPosition(new LatLng(location.Latitude, location.Longitude)));
-                    btnUebersicht.Text = location.Latitude.ToString();
+                    mMap.Clear();
+                    centerMap(LocationServices.FusedLocationApi.GetLastLocation(apiClient));
+                    for (int i = 0; i < 5; i++) generateMonster();
                     Log.Debug("LocationClient", "letzte position erhalten");
                 }
             }
@@ -153,7 +154,7 @@ namespace AppBasic
         }
 
 
-        private void starteKampf()
+        private void starteKampf(Monster monster)
         {
             Intent actKampf = new Intent(this, typeof(ActivityKampf));
             //Übergabe Spieler
@@ -166,22 +167,31 @@ namespace AppBasic
         public void OnMapReady(GoogleMap googleMap)
         {
             mMap = googleMap;
+            mMap.UiSettings.CompassEnabled = true;
             mMap.SetInfoWindowAdapter(this);
-           try
+            try
             {
-                MarkerOptions mo = new MarkerOptions();
-                
                 mMap.MyLocationEnabled = true;
-                mMap.AddMarker(new MarkerOptions().SetPosition(new LatLng(mMap.MyLocation.Latitude, mMap.MyLocation.Longitude)));
+                centerMap(LocationServices.FusedLocationApi.GetLastLocation(apiClient));
+                
             }
-
             catch {
-                 RequestPermissions(PermissionsLocation, RequestLocationId);
-
+                RequestPermissions(PermissionsLocation, RequestLocationId);
             }
+           
+        }
+        private void generateMonster()
+        {
+            Monster m = GetRandomMonster();
+            MarkerOptions opt = new MarkerOptions();
+            //Marker Icon setzen
+            //opt.Icon = GetMonsterIcon();
+            opt.SetPosition(GetRandomLatLng());
+
+            m.Marker = mMap.AddMarker(opt);
+            activeMonsters.Add(m);
 
         }
-
         public void OnConnected(Bundle connectionHint)
         {
             // This method is called when we connect to the LocationClient. We can start location updated directly form
@@ -189,9 +199,39 @@ namespace AppBasic
 
             // You must implement this to implement the IGooglePlayServicesClientConnectionCallbacks Interface
             Log.Info("LocationClient", "Now connected to client");
+
+
+            centerMap(LocationServices.FusedLocationApi.GetLastLocation(apiClient));
         }
 
-        
+        private Monster GetRandomMonster()
+        {
+            return Monster.getTestMonster();
+        }
+
+        private LatLng GetRandomLatLng()
+        {
+            double lat;
+            double lng;
+            
+
+            
+            Location loc = LocationServices.FusedLocationApi.GetLastLocation(apiClient);
+            Random r = new Random();
+            
+            int offsetLat = r.Next(10, 40);
+            int offsetLng = r.Next(10, 40);
+           
+            r = new Random();
+            if (r.Next(0, 10) > 5)
+                lat = loc.Latitude + (offsetLat / 10000.0);
+            else lat = loc.Latitude - (offsetLat / 10000.0);
+
+            if (r.Next(0, 10) > 5) lng = loc.Longitude + (offsetLng / 10000.0);
+            else lng = loc.Longitude - (offsetLng / 10000.0);
+
+            return new LatLng(lat, lng);
+        }
         public void OnConnectionSuspended(int cause)
         {
             
@@ -210,7 +250,10 @@ namespace AppBasic
             // This method returns changes in the user's location if they've been requested
 
             // You must implement this to implement the Android.Gms.Locations.ILocationListener Interface
+
+            centerMap(location);
             Log.Debug("LocationClient", "Location updated");
+
         }
 
         public View GetInfoContents(Marker marker)
@@ -221,8 +264,28 @@ namespace AppBasic
         public View GetInfoWindow(Marker marker)
         {
             View view = LayoutInflater.Inflate(Resource.Layout.MonsterInfo, null, false);
-
+            
+            foreach (Monster m in activeMonsters)
+            {
+                if(m.Marker.Equals(marker))
+                {
+                    //Infos einfügen
+                }
+            }
             return view;
+        }
+        private bool IsGooglePlayServicesInstalled()
+        {
+            int queryResult = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
+            if (queryResult == ConnectionResult.Success) return true;
+
+            if (GoogleApiAvailability.Instance.IsUserResolvableError(queryResult))
+            {
+                string errorString = GoogleApiAvailability.Instance.GetErrorString(queryResult);
+                Log.Error("ActivityMap", "Google Play Services Error: {0} - {1}", queryResult, errorString);
+            }
+            return false;
+
         }
     }
 }
