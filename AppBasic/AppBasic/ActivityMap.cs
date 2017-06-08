@@ -133,6 +133,7 @@ namespace AppBasic
                     centerMap(LocationServices.FusedLocationApi.GetLastLocation(apiClient));
                     for (int i = 0; i < 5; i++) generateMonster();
                     Log.Debug("LocationClient", "letzte position erhalten");
+                    Toast.MakeText(this, "Location", ToastLength.Long).Show();
                 }
             }
             else Log.Info("LocationClient", "warte auf client verbindung");
