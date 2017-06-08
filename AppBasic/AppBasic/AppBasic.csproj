@@ -111,7 +111,12 @@
     <Compile Include="ActivityKampf.cs" />
     <Compile Include="ActivityMap.cs" />
     <Compile Include="ActivityUebersicht.cs" />
+
     <Compile Include="Angriff.cs" />
+
+    <Compile Include="Client.cs" />
+    <Compile Include="DialogAnmeldung.cs" />
+
     <Compile Include="Logdaten.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Monster.cs" />
@@ -140,9 +145,6 @@
     <AndroidResource Include="Resources\layout\fragment_sample.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\pager_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\FragMapLayout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -159,6 +161,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\MonsterInfo.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\AnmeldungLayout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -182,10 +187,16 @@
     <AndroidResource Include="Resources\menu\actionbar_map.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values\Styles.xml" />
+    <AndroidResource Include="Resources\values\styles.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\IconProjekt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\anim\slideUp.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\anim\slideDown.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
