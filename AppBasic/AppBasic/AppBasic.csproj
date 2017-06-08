@@ -111,23 +111,17 @@
     <Compile Include="ActivityKampf.cs" />
     <Compile Include="ActivityMap.cs" />
     <Compile Include="ActivityUebersicht.cs" />
-
-    <Compile Include="Angriff.cs" />
-
     <Compile Include="Client.cs" />
     <Compile Include="DialogAnmeldung.cs" />
-
     <Compile Include="Logdaten.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Monster.cs" />
-    <Compile Include="Monsterart.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SlidingTabScrollView.cs" />
     <Compile Include="SlidingTabStrip.cs" />
     <Compile Include="Spieler.cs" />
     <Compile Include="TestLocation.cs" />
-    <Compile Include="Typ.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
