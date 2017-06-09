@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-  <style name="dialogAnimation">
-    <item name="android:windowEnterAnimation">@anim/slideUp</item>
-    <item name="android:windowExitAnimation">@anim/slideDown</item>
+  <style name="MyTheme" parent="Theme.AppCompat">
+    <item name="colorPrimary">#219653</item>
   </style>
 </resources>
