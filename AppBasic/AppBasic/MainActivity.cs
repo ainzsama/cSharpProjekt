@@ -11,10 +11,10 @@ namespace AppBasic
     public class MainActivity : Activity
     {
         EditText etName;
-        EditText stPw;
+        EditText etPw;
         Button btnLogin;
         Button btnRegist;
-
+        Button btnDialog;
         Spieler spieler;
         protected override void OnCreate(Bundle bundle)
         {
@@ -24,14 +24,32 @@ namespace AppBasic
             SetContentView (Resource.Layout.Main);
 
             etName = (EditText)FindViewById(Resource.Id.editTextName);
-            stPw = (EditText)FindViewById(Resource.Id.editTextPassword);
+            etPw = (EditText)FindViewById(Resource.Id.editTextPassword);
             btnLogin = (Button)FindViewById(Resource.Id.buttonLogin);
             btnRegist = (Button)FindViewById(Resource.Id.buttonRegist);
             btnLogin.Click += OnBtnLoginClick;
             btnRegist.Click += OnBtnRegistClick;
+            btnDialog = (Button)FindViewById(Resource.Id.buttonLogDia);
+
+
+            btnDialog.Click += StartLogIn;
             //Testspieler einfügen 
             spieler = Spieler.GetTestSpieler();
             spieler.Monster.Add(Monster.GetTestMonster());
+        }
+
+        private void StartLogIn(object sender, EventArgs e)
+        {
+            FragmentTransaction trans = FragmentManager.BeginTransaction();
+            DialogAnmeldung anm = new DialogAnmeldung();
+            anm.Show(trans, "AnmeldeDialog");
+            anm.OnAnmeldungComplete += Anm_OnAnmeldungComplete;
+        }
+
+        private void Anm_OnAnmeldungComplete(object sender, OnSingnUpEventArgs e)
+        {
+            etName.Text = e.Name;
+            etPw.Text = e.Pw;
         }
 
         private void OnBtnRegistClick(object sender, EventArgs e)
