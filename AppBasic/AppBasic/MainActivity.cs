@@ -30,8 +30,8 @@ namespace AppBasic
             btnLogin.Click += OnBtnLoginClick;
             btnRegist.Click += OnBtnRegistClick;
             //Testspieler einfügen 
-            spieler = Spieler.getTestSpieler();
-            spieler.Monster.Add(Monster.getTestMonster());
+            spieler = Spieler.GetTestSpieler();
+            spieler.Monster.Add(Monster.GetTestMonster());
         }
 
         private void OnBtnRegistClick(object sender, EventArgs e)

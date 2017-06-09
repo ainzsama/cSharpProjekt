@@ -160,7 +160,7 @@ namespace AppBasic
             //Übergabe Spieler
             actKampf.PutExtra("spieler", JsonConvert.SerializeObject(spieler));
             //Übergabe Gegner
-            actKampf.PutExtra("gegner", JsonConvert.SerializeObject(Monster.getTestMonster()));
+            actKampf.PutExtra("gegner", JsonConvert.SerializeObject(Monster.GetTestMonster()));
             StartActivity(actKampf);
         }
 
@@ -206,7 +206,7 @@ namespace AppBasic
 
         private Monster GetRandomMonster()
         {
-            return Monster.getTestMonster();
+            return Monster.GetTestMonster();
         }
 
         private LatLng GetRandomLatLng()
