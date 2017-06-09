@@ -121,7 +121,6 @@
     <Compile Include="SlidingTabScrollView.cs" />
     <Compile Include="SlidingTabStrip.cs" />
     <Compile Include="Spieler.cs" />
-    <Compile Include="TestLocation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
@@ -149,9 +148,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\Map.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\TestLocationLayout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\MonsterInfo.axml">

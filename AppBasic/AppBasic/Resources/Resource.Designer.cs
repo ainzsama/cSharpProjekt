@@ -1939,9 +1939,6 @@ namespace AppBasic
 			// aapt resource value: 0x7f0b002d
 			public const int bottom = 2131427373;
 			
-			// aapt resource value: 0x7f0b008f
-			public const int buttonLastLocation = 2131427471;
-			
 			// aapt resource value: 0x7f0b0073
 			public const int buttonLogDia = 2131427443;
 			
@@ -1959,9 +1956,6 @@ namespace AppBasic
 			
 			// aapt resource value: 0x7f0b0075
 			public const int buttonUebersicht = 2131427445;
-			
-			// aapt resource value: 0x7f0b0093
-			public const int buttonUpdate = 2131427475;
 			
 			// aapt resource value: 0x7f0b0064
 			public const int buttonVerbinden = 2131427428;
@@ -2080,8 +2074,8 @@ namespace AppBasic
 			// aapt resource value: 0x7f0b007e
 			public const int media_actions = 2131427454;
 			
-			// aapt resource value: 0x7f0b0097
-			public const int menu = 2131427479;
+			// aapt resource value: 0x7f0b008f
+			public const int menu = 2131427471;
 			
 			// aapt resource value: 0x7f0b0027
 			public const int middle = 2131427367;
@@ -2248,32 +2242,14 @@ namespace AppBasic
 			// aapt resource value: 0x7f0b006e
 			public const int textViewKaempfeGewonnen = 2131427438;
 			
-			// aapt resource value: 0x7f0b0090
-			public const int textViewLatitude = 2131427472;
-			
-			// aapt resource value: 0x7f0b0091
-			public const int textViewLongitude = 2131427473;
-			
 			// aapt resource value: 0x7f0b006b
 			public const int textViewName = 2131427435;
-			
-			// aapt resource value: 0x7f0b0092
-			public const int textViewProvider = 2131427474;
 			
 			// aapt resource value: 0x7f0b006c
 			public const int textViewSpielzeit = 2131427436;
 			
 			// aapt resource value: 0x7f0b0066
 			public const int textViewStatus = 2131427430;
-			
-			// aapt resource value: 0x7f0b0094
-			public const int textViewlat = 2131427476;
-			
-			// aapt resource value: 0x7f0b0095
-			public const int textViewlng = 2131427477;
-			
-			// aapt resource value: 0x7f0b0096
-			public const int textViewprov = 2131427478;
 			
 			// aapt resource value: 0x7f0b0083
 			public const int time = 2131427459;
@@ -2518,10 +2494,7 @@ namespace AppBasic
 			public const int support_simple_spinner_dropdown_item = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int TestLocationLayout = 2130903095;
-			
-			// aapt resource value: 0x7f030038
-			public const int Uebersicht = 2130903096;
+			public const int Uebersicht = 2130903095;
 			
 			static Layout()
 			{
