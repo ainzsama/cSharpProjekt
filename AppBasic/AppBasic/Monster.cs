@@ -17,30 +17,24 @@ namespace AppBasic
     {
         private int monsterId;
         private int hp;
-        private int atk;//wird durch Angriff entfernt
+        private int atk;
         private String name;
         private String nickname;
         private Marker marker;
-        /*Die Pfeile kennt VS 15 nich
-        public int Hp { get => hp; set => hp = value; }
-        public int Atk { get => atk; set => atk = value; }
-        public string Name { get => name; set => name = value; }
-        public int MonsterId { get => monsterId; set => monsterId = value; }
-        public string Nickname { get => nickname; set => nickname = value; }
-        public Marker Marker { get => marker; set => marker = value; }
-        */
 
+       
         public static Monster GetTestMonster()
         {
             Monster m = new Monster();
             m.MonsterId = 1;
             m.Hp = 100;
-            m.Atk = 10;
+            m.atk = 10;
             m.Name = "test";
             m.Nickname = "testNic";
 
             return m;
         }
+
 
         //Teil von Lukas Wölfle
         public Monster()
@@ -219,5 +213,6 @@ namespace AppBasic
         }
 
         internal Typ Typ { get => typ; set => typ = value; }
+
     }
 }
