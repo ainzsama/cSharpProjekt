@@ -111,8 +111,13 @@
     <Compile Include="ActivityKampf.cs" />
     <Compile Include="ActivityMap.cs" />
     <Compile Include="ActivityUebersicht.cs" />
+
+    <Compile Include="Angriff.cs" />
+    <Compile Include="AuswahlMonster.cs" />
+
     <Compile Include="Client.cs" />
     <Compile Include="DialogAnmeldung.cs" />
+
     <Compile Include="Logdaten.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Monster.cs" />
@@ -122,6 +127,10 @@
     <Compile Include="SlidingTabStrip.cs" />
     <Compile Include="Spieler.cs" />
     <Compile Include="TestLocation.cs" />
+
+    <Compile Include="Typ.cs" />
+    <Compile Include="Typen.cs" />
+
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
@@ -137,6 +146,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\fragment_sample.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\pager_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\FragMapLayout.axml">
@@ -157,7 +169,7 @@
     <AndroidResource Include="Resources\layout\MonsterInfo.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\AnmeldungLayout.axml">
+    <AndroidResource Include="Resources\layout\Monsterwaehlen.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -181,16 +193,13 @@
     <AndroidResource Include="Resources\menu\actionbar_map.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values\styles.xml" />
+    <AndroidResource Include="Resources\values\Styles.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\IconProjekt.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\anim\slideUp.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\anim\slideDown.xml" />
+    <AndroidResource Include="Resources\drawable\monster1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

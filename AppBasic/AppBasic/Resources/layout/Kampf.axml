@@ -1,7 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:p1="http://schemas.android.com/apk/res/android"
+    p1:layout_width="match_parent"
+    p1:layout_height="match_parent"
+    p1:weightSum="100"
+    p1:orientation="vertical"
+    p1:id="@+id/linearLayout1">
+    <TableLayout
+        p1:id="@+id/tableLayoutAnsicht"
+        p1:layout_width="match_parent"
+        p1:layout_height="match_parent"
+        p1:layout_weight="80"
+     >
+        <TableRow
+            p1:layout_weight="40">
+          
+            <TextView
+                p1:text=""
+         
+                p1:id="@+id/textViewLebenGegner"
+                p1:layout_height="match_parent"
+                p1:layout_width="match_parent"
+                p1:layout_weight="20" />
+            <ImageView
 
+                p1:id="@+id/ImageViewGegner"
+                p1:layout_height="match_parent"
+                p1:layout_width="match_parent"
+                p1:layout_weight="20" />
+        </TableRow>
+        <TableRow
+            p1:layout_weight="40">
+            <ImageView
+   
+                p1:id="@+id/ImageViewEigenesMonster"
+                p1:layout_height="match_parent"
+                p1:layout_width="match_parent"
+                p1:layout_weight="20" />
+            <TextView
+                p1:text=""
+
+                p1:id="@+id/textViewLebenSpieler"
+                p1:layout_height="match_parent"
+                p1:layout_width="match_parent"
+                p1:layout_weight="20" />
+        </TableRow>
+    </TableLayout>
+    <TableLayout
+        p1:layout_width="match_parent"
+        p1:layout_height="50dp"
+        p1:id="@+id/tableLayoutMenu"
+        p1:layout_weight="10"
+    >
+        <TableRow>
+            <Button
+                p1:text="Monster wechseln"
+        
+                p1:id="@+id/buttonMonster"
+                p1:layout_width="match_parent"
+                p1:textColor="@android:color/background_dark"
+                p1:layout_weight="5" />
+            <Button
+                p1:text="Flucht"
+        
+                p1:id="@+id/buttonFlucht"
+                p1:layout_width="match_parent"
+                p1:textColor="@android:color/background_dark"
+                p1:layout_weight="5" />
+        </TableRow>
+    </TableLayout>
+    <Button
+        p1:text="Angriff"
+        p1:id="@+id/buttonAngriff"
+        p1:layout_width="match_parent"
+        p1:layout_height="50dp"
+        p1:textColor="@android:color/background_dark"
+        p1:layout_weight="10" />
 </LinearLayout>

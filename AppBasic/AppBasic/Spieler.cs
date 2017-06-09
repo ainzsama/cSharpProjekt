@@ -18,6 +18,7 @@ namespace AppBasic
         private String name;
         private List<Monster> monster;
         private Logdaten logdaten;
+        private List<Typ> typen;
 
         public Spieler()
         {
@@ -28,8 +29,9 @@ namespace AppBasic
         public Logdaten Logdaten { get => logdaten; set => logdaten = value; }
         public List<Monster> Monster { get => monster; set => monster = value; }
         public int SpielerId { get => spielerId; set => spielerId = value; }
+        internal List<Typ> Typen { get => typen; set => typen = value; }
 
-        public static Spieler getTestSpieler()
+        public static Spieler GetTestSpieler()
         {
             Spieler s = new Spieler();
             s.SpielerId = 1;
