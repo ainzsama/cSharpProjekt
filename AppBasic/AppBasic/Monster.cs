@@ -13,7 +13,7 @@ using Android.Gms.Maps.Model;
 
 namespace AppBasic
 {
-    class Monster
+    public class Monster
     {
         private int monsterId;
         private int hp;
@@ -30,7 +30,7 @@ namespace AppBasic
         public Marker Marker { get => marker; set => marker = value; }
         */
 
-        public static Monster getTestMonster()
+        public static Monster GetTestMonster()
         {
             Monster m = new Monster();
             m.MonsterId = 1;
@@ -43,18 +43,37 @@ namespace AppBasic
         }
 
         //Teil von Lukas Wölfle
+        public Monster()
+        {
+
+        }
         public Monster(Angriff angriff, Monsterart art)
         {
             Angriff = angriff;
             Art = art;
             Hp = art.Maxhp;
+  
         }
         private Angriff angriff;
-        private int Maxhp;
+        private int maxhp;
         private Monsterart art;
         private int lvl;
         private int xp;
-        private int needxp;
+        private int benoetigteXp;
+        private Typ typ;
+        public bool Verteidigen(Angriff a)
+        {
+            Hp = hp - a.Gegen(this.Typ);
+            if(Hp>0)
+            {
+                return true;
+            }
+            if(hp < 0)
+            {
+                hp = 0;
+            }
+            return false;
+        }
         public Angriff Angriff
         {
             get { return angriff; }
@@ -147,16 +166,16 @@ namespace AppBasic
             }
         }
 
-        public int Maxhp1
+        public int Maxhp
         {
             get
             {
-                return Maxhp;
+                return maxhp;
             }
 
             set
             {
-                Maxhp = value;
+                maxhp = value;
             }
         }
 
@@ -186,17 +205,19 @@ namespace AppBasic
             }
         }
 
-        public int Needxp
+        public int BenoetigteXp
         {
             get
             {
-                return needxp;
+                return benoetigteXp;
             }
 
             set
             {
-                needxp = value;
+                benoetigteXp = value;
             }
         }
+
+        internal Typ Typ { get => typ; set => typ = value; }
     }
 }
