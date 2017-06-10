@@ -109,13 +109,15 @@ namespace AppBasic
         {
             if (mMap != null)
             {
-                CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
-                builder.Target(new LatLng(loc.Latitude, loc.Longitude));
-                builder.Zoom(17);
-                CameraPosition camPos = builder.Build();
+                if(loc != null)
+                {
+                    CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
+                    builder.Target(new LatLng(loc.Latitude, loc.Longitude));
+                    builder.Zoom(17);
+                    CameraPosition camPos = builder.Build();
 
-                mMap.MoveCamera(CameraUpdateFactory.NewCameraPosition(camPos));
-                
+                    mMap.MoveCamera(CameraUpdateFactory.NewCameraPosition(camPos));
+                }
             }
         }
         protected override void OnResume()
@@ -130,10 +132,9 @@ namespace AppBasic
                 if (location != null)
                 {
                     mMap.Clear();
-                    centerMap(LocationServices.FusedLocationApi.GetLastLocation(apiClient));
+                    centerMap(location);
                     for (int i = 0; i < 5; i++) generateMonster();
                     Log.Debug("LocationClient", "letzte position erhalten");
-                    Toast.MakeText(this, "Location", ToastLength.Long).Show();
                 }
             }
             else Log.Info("LocationClient", "warte auf client verbindung");
@@ -161,7 +162,7 @@ namespace AppBasic
             //Übergabe Spieler
             actKampf.PutExtra("spieler", JsonConvert.SerializeObject(spieler));
             //Übergabe Gegner
-            actKampf.PutExtra("gegner", JsonConvert.SerializeObject(Monster.getTestMonster()));
+            actKampf.PutExtra("gegner", JsonConvert.SerializeObject(Monster.GetTestMonster()));
             StartActivity(actKampf);
         }
 
@@ -200,14 +201,14 @@ namespace AppBasic
 
             // You must implement this to implement the IGooglePlayServicesClientConnectionCallbacks Interface
             Log.Info("LocationClient", "Now connected to client");
+            Location loc = LocationServices.FusedLocationApi.GetLastLocation(apiClient);
 
-
-            centerMap(LocationServices.FusedLocationApi.GetLastLocation(apiClient));
+            if (loc != null)centerMap(loc);
         }
 
         private Monster GetRandomMonster()
         {
-            return Monster.getTestMonster();
+            return Monster.GetTestMonster();
         }
 
         private LatLng GetRandomLatLng()

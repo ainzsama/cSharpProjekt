@@ -4,16 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextName"
-        android:text="Name" />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextPassword"
-        android:text="Password" />
     <Button
         android:text="Login"
         android:layout_width="match_parent"
