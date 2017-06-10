@@ -3,4 +3,23 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/LayoutMonsterWaehlen" />
+              android:weightSum="100"
+    >
+  <Button
+        android:layout_weight="10"
+        android:text="hoch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:id="@+id/ButtonHoch"/>
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="1000"
+     android:id="@+id/LayoutMonsterWaehlen">
+  </LinearLayout>
+  <Button
+       android:layout_weight="10"
+       android:text="runter"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+          android:id="@+id/ButtonRunter"/>
+</LinearLayout>

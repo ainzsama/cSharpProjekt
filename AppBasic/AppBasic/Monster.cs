@@ -35,7 +35,8 @@ namespace AppBasic
             Monster m = new Monster();
             m.MonsterId = 1;
             m.Hp = 100;
-            m.Atk = 10;
+            m.Angriff = new Angriff("Biss", 20, Typen.ErstelleTypen().ElementAt<Typ>(0));
+            m.Art = new Monsterart("Beiserchen", 100, Resource.Drawable.monster1, 10, Typen.ErstelleTypen().ElementAt<Typ>(0));
             m.Name = "test";
             m.Nickname = "testNic";
 
