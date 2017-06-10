@@ -10,8 +10,6 @@ namespace AppBasic
     [Activity(Label = "AppBasic", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
-        EditText etName;
-        EditText etPw;
         Button btnLogin;
         Button btnRegist;
         Button btnDialog;
@@ -23,8 +21,7 @@ namespace AppBasic
             // Set our view from the "main" layout resource
             SetContentView (Resource.Layout.Main);
 
-            etName = (EditText)FindViewById(Resource.Id.editTextName);
-            etPw = (EditText)FindViewById(Resource.Id.editTextPassword);
+           
             btnLogin = (Button)FindViewById(Resource.Id.buttonLogin);
             btnRegist = (Button)FindViewById(Resource.Id.buttonRegist);
             btnLogin.Click += OnBtnLoginClick;
@@ -48,13 +45,15 @@ namespace AppBasic
 
         private void Anm_OnAnmeldungComplete(object sender, OnSingnUpEventArgs e)
         {
-            etName.Text = e.Name;
-            etPw.Text = e.Pw;
+           
         }
 
         private void OnBtnRegistClick(object sender, EventArgs e)
         {
-            
+            FragmentTransaction trans = FragmentManager.BeginTransaction();
+            DialogRegistrierung reg = new DialogRegistrierung();
+            reg.Show(trans, "Registrierungsdialog");
+            reg.OnRegistrierungComplete += Anm_OnAnmeldungComplete;
         }
 
         private void OnBtnLoginClick(object sender, EventArgs e)
