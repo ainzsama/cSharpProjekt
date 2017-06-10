@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+  <EditText
+      android:layout_width="250dp"
+      android:layout_height="wrap_content"
+      android:id="@+id/editTextIpReg"
+      android:text="192.168.178.97" />
+  <EditText
+      android:text="martines"
+      android:textAppearance="?android:attr/textAppearanceLarge"
+      android:layout_width="250dp"
+      android:layout_height="wrap_content"
+      android:id="@+id/editTextName_RegDialog" />
+  <EditText
+      android:text="12345"
+      android:textAppearance="?android:attr/textAppearanceLarge"
+      android:layout_width="250dp"
+      android:layout_height="wrap_content"
+      android:id="@+id/editTextPW_RegDialog"
+      android:password="true" />
+  <EditText
+      android:text="12345"
+      android:textAppearance="?android:attr/textAppearanceLarge"
+      android:layout_width="250dp"
+      android:layout_height="wrap_content"
+      android:id="@+id/editTextPwConfirm_RegDialog"
+      android:password="true" />
+  <Button
+      android:text="Verbinden"
+      android:layout_width="250dp"
+      android:layout_height="wrap_content"
+      android:id="@+id/buttonVerbindenReg" />
+  <Button
+      android:text="Anmelden"
+      android:layout_width="250dp"
+      android:layout_height="wrap_content"
+      android:id="@+id/buttonReg" />
+  <TextView
+      android:text="Large Text"
+      android:textAppearance="?android:attr/textAppearanceLarge"
+      android:layout_width="250dp"
+      android:layout_height="wrap_content"
+      android:id="@+id/textViewStatusReg" />
+</LinearLayout>

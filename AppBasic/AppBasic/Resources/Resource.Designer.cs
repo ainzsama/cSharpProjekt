@@ -1972,6 +1972,9 @@ namespace AppBasic
 			// aapt resource value: 0x7f0b0039
 			public const int buttonPanel = 2131427385;
 			
+			// aapt resource value: 0x7f0b00a1
+			public const int buttonReg = 2131427489;
+			
 			// aapt resource value: 0x7f0b007c
 			public const int buttonRegist = 2131427452;
 			
@@ -1980,6 +1983,9 @@ namespace AppBasic
 			
 			// aapt resource value: 0x7f0b0064
 			public const int buttonVerbinden = 2131427428;
+			
+			// aapt resource value: 0x7f0b00a0
+			public const int buttonVerbindenReg = 2131427488;
 			
 			// aapt resource value: 0x7f0b0087
 			public const int cancel_action = 2131427463;
@@ -2020,17 +2026,29 @@ namespace AppBasic
 			// aapt resource value: 0x7f0b0061
 			public const int editTextIp = 2131427425;
 			
+			// aapt resource value: 0x7f0b009c
+			public const int editTextIpReg = 2131427484;
+			
 			// aapt resource value: 0x7f0b0079
 			public const int editTextName = 2131427449;
 			
 			// aapt resource value: 0x7f0b0062
 			public const int editTextName_AnmDialog = 2131427426;
 			
+			// aapt resource value: 0x7f0b009d
+			public const int editTextName_RegDialog = 2131427485;
+			
 			// aapt resource value: 0x7f0b0063
 			public const int editTextPW_AnmDialog = 2131427427;
 			
+			// aapt resource value: 0x7f0b009e
+			public const int editTextPW_RegDialog = 2131427486;
+			
 			// aapt resource value: 0x7f0b007a
 			public const int editTextPassword = 2131427450;
+			
+			// aapt resource value: 0x7f0b009f
+			public const int editTextPwConfirm_RegDialog = 2131427487;
 			
 			// aapt resource value: 0x7f0b0054
 			public const int edit_query = 2131427412;
@@ -2104,8 +2122,8 @@ namespace AppBasic
 			// aapt resource value: 0x7f0b0089
 			public const int media_actions = 2131427465;
 			
-			// aapt resource value: 0x7f0b009c
-			public const int menu = 2131427484;
+			// aapt resource value: 0x7f0b00a3
+			public const int menu = 2131427491;
 			
 			// aapt resource value: 0x7f0b0027
 			public const int middle = 2131427367;
@@ -2292,6 +2310,9 @@ namespace AppBasic
 			
 			// aapt resource value: 0x7f0b0066
 			public const int textViewStatus = 2131427430;
+			
+			// aapt resource value: 0x7f0b00a2
+			public const int textViewStatusReg = 2131427490;
 			
 			// aapt resource value: 0x7f0b008e
 			public const int time = 2131427470;
@@ -2530,19 +2551,22 @@ namespace AppBasic
 			public const int pager_item = 2130903092;
 			
 			// aapt resource value: 0x7f030035
-			public const int select_dialog_item_material = 2130903093;
+			public const int RegistrierungLayout = 2130903093;
 			
 			// aapt resource value: 0x7f030036
-			public const int select_dialog_multichoice_material = 2130903094;
+			public const int select_dialog_item_material = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int select_dialog_singlechoice_material = 2130903095;
+			public const int select_dialog_multichoice_material = 2130903095;
 			
 			// aapt resource value: 0x7f030038
-			public const int support_simple_spinner_dropdown_item = 2130903096;
+			public const int select_dialog_singlechoice_material = 2130903096;
 			
 			// aapt resource value: 0x7f030039
-			public const int Uebersicht = 2130903097;
+			public const int support_simple_spinner_dropdown_item = 2130903097;
+			
+			// aapt resource value: 0x7f03003a
+			public const int Uebersicht = 2130903098;
 			
 			static Layout()
 			{
