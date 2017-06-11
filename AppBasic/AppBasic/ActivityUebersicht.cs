@@ -20,7 +20,7 @@ namespace AppBasic
     {
         private ViewPager mViewPager;
         private SlidingTabScrollView mScrollView;
-        private Spieler spieler;
+        //private Spieler spieler;
        
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -30,12 +30,12 @@ namespace AppBasic
             SetContentView(Resource.Layout.Uebersicht);
             mScrollView = FindViewById<SlidingTabScrollView>(Resource.Id.sliding_tabs);
             mViewPager = FindViewById<ViewPager>(Resource.Id.viewPager);
-
-            mViewPager.Adapter = new SamplePagerAdapter(SupportFragmentManager);
+ 
+            mViewPager.Adapter = new MyPagerAdapter(SupportFragmentManager);
             mScrollView.ViewPager = mViewPager;
 
             //Entgegennehmen Spieler
-            spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler"));
+            //spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler"));
         
 
 
@@ -51,11 +51,11 @@ namespace AppBasic
     }
 
 
-    public class SamplePagerAdapter : Android.Support.V4.App.FragmentPagerAdapter
+    public class MyPagerAdapter : Android.Support.V4.App.FragmentPagerAdapter
     {
         private List<Android.Support.V4.App.Fragment> mFragmentHolder;
 
-        public SamplePagerAdapter(Android.Support.V4.App.FragmentManager fragManager) : base(fragManager)
+        public MyPagerAdapter(Android.Support.V4.App.FragmentManager fragManager) : base(fragManager)
         {
             mFragmentHolder = new List<Android.Support.V4.App.Fragment>();
             mFragmentHolder.Add(new FragmentMonster());
@@ -73,13 +73,35 @@ namespace AppBasic
     public class FragmentMonster : Android.Support.V4.App.Fragment
     {
         private EditText mTxt;
+        private ListView lvMonsterarten;
+        private List<Monsterart> monsterarten;
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.FragMonsterLayout, container, false);
 
+            monsterarten = JsonConvert.DeserializeObject<List<Monsterart>>(Activity.Intent.GetStringExtra("monsterarten"));
             mTxt = view.FindViewById<EditText>(Resource.Id.editText1);
             mTxt.Text = "Monster";
+
+            lvMonsterarten = view.FindViewById<ListView>(Resource.Id.listViewMonsterarten_Uebersicht);
+
+            ListViewAdapterMonster adapter = new ListViewAdapterMonster(Activity, monsterarten);
+
+            lvMonsterarten.Adapter = adapter;
+
+            lvMonsterarten.ItemClick += LvMonsterarten_ItemClick;
+            lvMonsterarten.ItemLongClick += LvMonsterarten_ItemLongClick;
             return view;
+        }
+
+        private void LvMonsterarten_ItemLongClick(object sender, AdapterView.ItemLongClickEventArgs e)
+        {
+            //Anzeigen ausführliche Infos
+        }
+
+        private void LvMonsterarten_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        {
+            //Anzeigen Bild
         }
 
         public override string ToString() //Called on line 156 in SlidingTabScrollView

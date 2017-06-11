@@ -116,6 +116,7 @@
     <Compile Include="Client.cs" />
     <Compile Include="DialogAnmeldung.cs" />
     <Compile Include="DialogRegistrierung.cs" />
+    <Compile Include="ListViewAdapterMonster.cs" />
     <Compile Include="Logdaten.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Monster.cs" />
@@ -141,12 +142,6 @@
     <AndroidResource Include="Resources\layout\Uebersicht.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\fragment_sample.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\pager_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\FragMapLayout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -166,6 +161,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\AnmeldungLayout.axml" />
+    <AndroidResource Include="Resources\layout\ListViewRowMonster.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml">

@@ -43,7 +43,7 @@ namespace AppBasic
             btnCon.Click += BtnCon_Click;
 
             //RegistrierungsButton
-            btnReg = View.FindViewById<Button>(Resource.Id.buttonReg);
+            btnReg = view.FindViewById<Button>(Resource.Id.buttonReg);
             btnReg.Enabled = false;
             btnReg.Click += BtnReg_Click;
 

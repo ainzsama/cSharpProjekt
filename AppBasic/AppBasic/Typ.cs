@@ -27,5 +27,11 @@ namespace AppBasic
         public string Name { get => name; set => name = value; }
         public int Id { get => id; set => id = value; }
         public int Starkgegen { get => starkgegen; set => starkgegen = value; }
+
+        public static Typ GetTestTyp()
+        {
+            List<Typ> list = Typen.ErstelleTypen();
+            return list.ElementAtOrDefault(5);
+        }
     }
 }

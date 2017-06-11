@@ -83,5 +83,10 @@ namespace AppBasic
         }
 
         public int Sterbexp { get => sterbexp; set => sterbexp = value; }
+
+        public static Monsterart GetTestMonsterart()
+        {
+            return new Monsterart("testArt", 5, 3, 4, Typ.GetTestTyp());
+        }
     }
 }

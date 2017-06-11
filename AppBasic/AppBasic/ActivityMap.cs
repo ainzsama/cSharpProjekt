@@ -48,7 +48,6 @@ namespace AppBasic
 
         private List<Monster> activeMonsters;
 
-
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -65,11 +64,6 @@ namespace AppBasic
             spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler"));
             activeMonsters = new List<Monster>();
 
-
-            
-
-            SetUpMap();
-
             _isGooglePlayServicesInstalled = IsGooglePlayServicesInstalled();
 
             if (_isGooglePlayServicesInstalled)
@@ -84,8 +78,27 @@ namespace AppBasic
                 Toast.MakeText(this, "Google Play Services nicht installiert", ToastLength.Long).Show();
 
             }
+            //RequestPermissions(PermissionsLocation, RequestLocationId);
+            if (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Permission.Granted && ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessCoarseLocation) == Permission.Granted)
+            {
+                Log.Debug("CheckPermissions", "Permissions ok");
+                SetUpMap();
+            }
+            else
+            {
+                Log.Debug("CheckPermissions", "Permissions nicht ok");
+                RequestPermissions(PermissionsLocation, RequestLocationId);
+            }            
+        }
 
-            
+        private void OnClickUebersicht(object sender, EventArgs e)
+        {
+            Intent actUebersicht = new Intent(this, typeof(ActivityUebersicht));
+
+            //Übergabe Spieler
+            actUebersicht.PutExtra("spieler", Intent.GetStringExtra("spieler"));
+            actUebersicht.PutExtra("monsterarten", Intent.GetStringExtra("monsterarten"));
+            StartActivity(actUebersicht);
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
@@ -96,8 +109,8 @@ namespace AppBasic
                     {
                         if (grantResults[0] == Permission.Granted)
                         {
-                            mMap.MyLocationEnabled = true;
-
+                            SetUpMap();
+                            
                         }
                     }
                     break;
@@ -129,6 +142,7 @@ namespace AppBasic
             if (apiClient.IsConnected)
             {
                 Location location = LocationServices.FusedLocationApi.GetLastLocation(apiClient);
+                Log.Debug("Location", "Location" + location.ToString());
                 if (location != null)
                 {
                     mMap.Clear();
@@ -136,17 +150,10 @@ namespace AppBasic
                     for (int i = 0; i < 5; i++) generateMonster();
                     Log.Debug("LocationClient", "letzte position erhalten");
                 }
+                else Log.Debug("LocationClient", "Position nicht erhalten");
             }
-            else Log.Info("LocationClient", "warte auf client verbindung");
+            else Log.Debug("LocationClient", "warte auf client verbindung");
 
-        }
-        private void OnClickUebersicht(object sender, EventArgs e)
-        {
-            Intent actUebersicht = new Intent(this, typeof(ActivityUebersicht));
-
-            //Übergabe Spieler
-            actUebersicht.PutExtra("spieler", JsonConvert.SerializeObject(spieler));
-            StartActivity(actUebersicht);
         }
 
         private void SetUpMap()
@@ -171,17 +178,19 @@ namespace AppBasic
             mMap = googleMap;
             mMap.UiSettings.CompassEnabled = true;
             mMap.SetInfoWindowAdapter(this);
+           
             try
             {
                 mMap.MyLocationEnabled = true;
+                mMap.UiSettings.MyLocationButtonEnabled = true;
                 centerMap(LocationServices.FusedLocationApi.GetLastLocation(apiClient));
-                
+
             }
-            catch {
+            catch
+            {
                 RequestPermissions(PermissionsLocation, RequestLocationId);
             }
-           
-        }
+    }
         private void generateMonster()
         {
             Monster m = GetRandomMonster();
@@ -202,7 +211,7 @@ namespace AppBasic
             // You must implement this to implement the IGooglePlayServicesClientConnectionCallbacks Interface
             Log.Info("LocationClient", "Now connected to client");
             Location loc = LocationServices.FusedLocationApi.GetLastLocation(apiClient);
-
+           
             if (loc != null)centerMap(loc);
         }
 

@@ -56,5 +56,10 @@ namespace AppBasic
                 typ = value;
             }
         }
+
+        public static Angriff GetTestAngriff()
+        {
+            return new Angriff("Test", 22, Typ.GetTestTyp());
+        }
     }
 }

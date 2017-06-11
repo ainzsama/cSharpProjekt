@@ -4,6 +4,7 @@ using Android.OS;
 using System;
 using Android.Content;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace AppBasic
 {
@@ -14,6 +15,7 @@ namespace AppBasic
         Button btnRegist;
         Button btnDialog;
         Spieler spieler;
+        List<Monsterart> monsterarten;
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -33,6 +35,7 @@ namespace AppBasic
             //Testspieler einfügen 
             spieler = Spieler.GetTestSpieler();
             spieler.Monster.Add(Monster.GetTestMonster());
+            EinlesenMonsterarten(); //Später in Anm_OnAnmeldungComplete
         }
 
         private void StartLogIn(object sender, EventArgs e)
@@ -43,6 +46,20 @@ namespace AppBasic
             anm.OnAnmeldungComplete += Anm_OnAnmeldungComplete;
         }
 
+        private void EinlesenMonsterarten()
+        {
+            monsterarten = new List<Monsterart>();
+
+            //XML Datei suchen -> aus datei lesen oder von Server anfordern und XML erstellen
+            for (int i = 0; i < 20; i++)
+            {
+                Monsterart m = Monsterart.GetTestMonsterart();
+                m.Name += i.ToString();
+                monsterarten.Add(m);
+            }
+
+            
+        }
         private void Anm_OnAnmeldungComplete(object sender, OnSingnUpEventArgs e)
         {
            
@@ -64,6 +81,7 @@ namespace AppBasic
             
             //Übergabe Spieler
             actMap.PutExtra("spieler", JsonConvert.SerializeObject(spieler));
+            actMap.PutExtra("monsterarten", JsonConvert.SerializeObject(monsterarten));
             StartActivity(actMap);
         }
 

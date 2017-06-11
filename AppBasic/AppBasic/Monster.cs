@@ -31,6 +31,9 @@ namespace AppBasic
             m.atk = 10;
             m.Name = "test";
             m.Nickname = "testNic";
+            m.Angriff = Angriff.GetTestAngriff();
+            m.Art = Monsterart.GetTestMonsterart();
+            m.Typ = Typ.GetTestTyp();
 
             return m;
         }
