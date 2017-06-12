@@ -20,12 +20,6 @@ namespace AppBasic
         private Spieler spieler;
         private Monster gegner;
         private ImageView spielerBild;
-
-        internal void Wechseln(Monster m)
-        {
-            throw new NotImplementedException();
-        }
-
         private ImageView gegnerBild;
         private TextView gegnerLeben;
         private TextView spielerLeben;
@@ -33,6 +27,9 @@ namespace AppBasic
         private Monster ausgewaehltesMonster;
         private LinearLayout monsteranzeige;
         private AuswahlMonster[] monsterauswahl;
+        private Button buttonup;
+        private int gezeigt;
+        private Button buttondown;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -41,24 +38,65 @@ namespace AppBasic
             //Entgegennehmen Spieler und Gegner/Monster
             spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler"));
             gegner = JsonConvert.DeserializeObject<Monster>(Intent.GetStringExtra("gegner"));
+            /*spieler = new Spieler();
+            spieler.Monster = new List<Monster>();
+            spieler.Monster.Add(Monster.GetTestMonster());
+            gegner = Monster.GetTestMonster();*/
             // Create your application here
             gegnerLeben = FindViewById<TextView>(Resource.Id.textViewLebenGegner);
             gegnerBild = FindViewById<ImageView>(Resource.Id.ImageViewGegner);
             spielerBild = FindViewById<ImageView>(Resource.Id.ImageViewEigenesMonster);
             spielerLeben = FindViewById<TextView>(Resource.Id.textViewLebenSpieler);
+            buttondown = FindViewById<Button>(Resource.Id.ButtonRunter);
+            buttonup = FindViewById<Button>(Resource.Id.ButtonHoch);
+            angriff = FindViewById<Button>(Resource.Id.buttonAngriff);
+            FindViewById<Button>(Resource.Id.buttonMonster).Click += delegate { MonsterWechseln(); };
+            FindViewById<Button>(Resource.Id.buttonFlucht).Click += delegate { Beenden(); };
+            monsteranzeige = FindViewById<LinearLayout>(Resource.Id.LayoutMonsterWaehlen);
             AnzeigenLeben();
             AnzeigenBilder();
-            angriff = FindViewById<Button>(Resource.Id.buttonAngriff);
-            FindViewById<Button>(Resource.Id.buttonMonster).Click += delegate{ MonsterWechseln(); };
-            FindViewById<Button>(Resource.Id.buttonFlucht).Click += delegate { Beenden(); };
-            monsteranzeige=FindViewById<LinearLayout>(Resource.Id.LayoutMonsterWaehlen);
             spieler.Typen = Typen.ErstelleTypen();
             ausgewaehltesMonster = spieler.Monster.ElementAt<Monster>(0);
             angriff.Click += delegate
             {
                 Angriff();
             };
+            buttondown.Click += delegate
+            {
+                Runter();
+            };
+            buttonup.Click += delegate
+            {
+                Hoch();
+            };
         }
+
+        private void Hoch()
+        {
+            if (gezeigt > 0)
+            {
+                monsteranzeige.RemoveAllViews();
+                gezeigt--;
+                for (int i = gezeigt; i < gezeigt + 5; i++)
+                {
+                    monsteranzeige.AddView(monsterauswahl[i].Button);
+                }
+            }
+        }
+
+        private void Runter()
+        {
+            if (gezeigt < monsterauswahl.Length - 6)
+            {
+                monsteranzeige.RemoveAllViews();
+                gezeigt++;
+                for (int i = gezeigt; i < gezeigt + 5; i++)
+                {
+                    monsteranzeige.AddView(monsterauswahl[i].Button);
+                }
+            }
+        }
+
         private void Angriff()
         {
             if (gegner.Verteidigen(ausgewaehltesMonster.Angriff))
@@ -108,27 +146,30 @@ namespace AppBasic
             SetContentView(Resource.Layout.Monsterwaehlen);
             monsterauswahl = new AuswahlMonster[10];
             int i = 0;
-            foreach(Monster m in spieler.Monster)
+            gezeigt = 0;
+            foreach (Monster m in spieler.Monster)
             {
-                 monsterauswahl[i] = new AuswahlMonster(this, m, i);
-                Button b = new Button(this);
+                monsterauswahl[i] = new AuswahlMonster(this, m, i);
                 i++;
-                monsteranzeige.AddView(b);
+                if (i < 5)
+                {
+                    monsteranzeige.AddView(monsterauswahl[i].Button);
+                }
             }
-            
-           
+
+
         }
 
         public void Wechsel(Monster m)
         {
             ausgewaehltesMonster = m;
-            if(ausgewaehltesMonster.Hp != 0)
+            if (ausgewaehltesMonster.Hp != 0)
             {
                 SetContentView(Resource.Layout.Kampf);
                 AnzeigenLeben();
                 AnzeigenBilder();
             }
-         
+
         }
 
         private void AnzeigenBilder()

@@ -75,13 +75,13 @@ namespace AppBasic
         private EditText mTxt;
         private ListView lvMonsterarten;
         private List<Monsterart> monsterarten;
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.FragMonsterLayout, container, false);
 
             monsterarten = JsonConvert.DeserializeObject<List<Monsterart>>(Activity.Intent.GetStringExtra("monsterarten"));
-            mTxt = view.FindViewById<EditText>(Resource.Id.editText1);
-            mTxt.Text = "Monster";
+            
 
             lvMonsterarten = view.FindViewById<ListView>(Resource.Id.listViewMonsterarten_Uebersicht);
 

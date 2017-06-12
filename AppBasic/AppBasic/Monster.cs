@@ -17,12 +17,19 @@ namespace AppBasic
     {
         private int monsterId;
         private int hp;
-        private int atk;
+        private int atk; //Kann weg
         private String name;
         private String nickname;
         private Marker marker;
 
-       
+        
+        private Angriff angriff;
+        private int maxhp;
+        private Monsterart art;
+        private int lvl;
+        private int xp;
+        private int benoetigteXp;
+        private Typ typ;
         public static Monster GetTestMonster()
         {
             Monster m = new Monster();
@@ -51,13 +58,6 @@ namespace AppBasic
             Hp = art.Maxhp;
   
         }
-        private Angriff angriff;
-        private int maxhp;
-        private Monsterart art;
-        private int lvl;
-        private int xp;
-        private int benoetigteXp;
-        private Typ typ;
         public bool Verteidigen(Angriff a)
         {
             Hp = hp - a.Gegen(this.Typ);
