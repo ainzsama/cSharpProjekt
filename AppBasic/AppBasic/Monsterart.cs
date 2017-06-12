@@ -20,13 +20,19 @@ namespace AppBasic
         private int pic;
         private Typ typ;
         private int sterbexp;
-        public Monsterart(String name, int maxhp, int pic,int hpzunahme,Typ typ)
+        public Monsterart(String name, int maxhp, int pic,int hpzunahme)
         {
-            Typ = typ;
             Hpzunahme = hpzunahme;
             Pic = pic;
             Name = name;
             Maxhp = maxhp;
+            Sterbexp = 20;
+        }
+
+        public Monsterart(string name, int maxhp, int pic, int hpzunahme, Typ typ) : this(name, maxhp, pic, hpzunahme)
+        {
+            Sterbexp = 20;
+            this.typ = typ;
         }
 
         public String Name

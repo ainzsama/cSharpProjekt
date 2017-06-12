@@ -21,7 +21,7 @@ namespace AppBasic
 
             Button = new Button(a);
             Button.Text = m.Name + " lvl: " + m.Lvl;
-            Button.SetHeight(200);
+          //  Button.SetHeight(200);
             Button.Click += delegate { a.Wechsel(m); };
         }
 

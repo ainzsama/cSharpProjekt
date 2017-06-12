@@ -49,12 +49,12 @@ namespace AppBasic
             spielerLeben = FindViewById<TextView>(Resource.Id.textViewLebenSpieler);
             buttondown = FindViewById<Button>(Resource.Id.ButtonRunter);
             buttonup = FindViewById<Button>(Resource.Id.ButtonHoch);
-            AnzeigenLeben();
-            AnzeigenBilder();
             angriff = FindViewById<Button>(Resource.Id.buttonAngriff);
             FindViewById<Button>(Resource.Id.buttonMonster).Click += delegate{ MonsterWechseln(); };
             FindViewById<Button>(Resource.Id.buttonFlucht).Click += delegate { Beenden(); };
             monsteranzeige=FindViewById<LinearLayout>(Resource.Id.LayoutMonsterWaehlen);
+            AnzeigenLeben();
+            AnzeigenBilder();
             spieler.Typen = Typen.ErstelleTypen();
             ausgewaehltesMonster = spieler.Monster.ElementAt<Monster>(0);
             angriff.Click += delegate
