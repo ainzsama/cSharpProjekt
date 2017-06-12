@@ -14,15 +14,15 @@ namespace AppBasic
 {
     public class Angriff
     {
+        private String name;
+        private int schaden;
+        private Typ typ;
         public Angriff(String name, int schaden,Typ typ)
         {
             Typ = typ;
             Schaden = schaden;
             Name = name;
         }
-        private String name;
-        private int schaden;
-        private Typ typ;
         public String Name
         {
             get { return name; }
@@ -32,7 +32,7 @@ namespace AppBasic
         public int Gegen(Typ typ)
         {
             int schaden = Schaden;
-            if(typ.Starkgegen==typ.Id)
+            if(Typ.Starkgegen==typ.Id)
             {
                 schaden *= 2;
             }

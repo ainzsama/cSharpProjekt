@@ -16,35 +16,43 @@ namespace AppBasic
     public class Monster
     {
         private int monsterId;
-        private int hp;
+        private int hp;  //wau wau
         private int atk; //Kann weg
-        private String name;
+        private String name; //unnötig -> in Monsterart
         private String nickname;
         private Marker marker;
 
         
-        private Angriff angriff;
-        private int maxhp;
-        private Monsterart art;
+        private Angriff angriff; //attake
+        private int maxhp; //anzeigen
+        private Monsterart art; //Basismonster
         private int lvl;
         private int xp;
         private int benoetigteXp;
-        private Typ typ;
+        private Typ typ;    //unnötig -> in Monsterart
+        //public static Monster GetTestMonster() //meins(LL)
+        //{
+        //    Monster m = new Monster();
+        //    m.MonsterId = 1;
+        //    m.Hp = 100;
+        //    m.atk = 10;
+        //    m.Name = "test";
+        //    m.Nickname = "testNic";
+        //    m.Angriff = Angriff.GetTestAngriff();
+        //    m.Art = Monsterart.GetTestMonsterart();
+        //    m.Typ = Typ.GetTestTyp();
+
+        //    return m;
+        //}
         public static Monster GetTestMonster()
         {
             Monster m = new Monster();
             m.MonsterId = 1;
             m.Hp = 100;
-            m.atk = 10;
-            m.Name = "test";
-            m.Nickname = "testNic";
-            m.Angriff = Angriff.GetTestAngriff();
-            m.Art = Monsterart.GetTestMonsterart();
-            m.Typ = Typ.GetTestTyp();
-
+            m.Angriff = new Angriff("Biss", 20, Typen.ErstelleTypen().ElementAt<Typ>(0));
+            m.Art = new Monsterart("Beiserchen", 100, Resource.Drawable.monster1, 10, Typen.ErstelleTypen().ElementAt<Typ>(0));
             return m;
         }
-
 
         //Teil von Lukas Wölfle
         public Monster()
@@ -60,7 +68,7 @@ namespace AppBasic
         }
         public bool Verteidigen(Angriff a)
         {
-            Hp = hp - a.Gegen(this.Typ);
+            Hp = hp - a.Gegen(this.Art.Typ);
             if(Hp>0)
             {
                 return true;

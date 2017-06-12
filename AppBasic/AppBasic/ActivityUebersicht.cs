@@ -80,7 +80,7 @@ namespace AppBasic
         {
             var view = inflater.Inflate(Resource.Layout.FragMonsterLayout, container, false);
 
-            monsterarten = JsonConvert.DeserializeObject<List<Monsterart>>(Activity.Intent.GetStringExtra("monsterarten"));
+            monsterarten = JsonConvert.DeserializeObject<List<Monsterart>>(Activity.Intent.GetStringExtra("monsterarten")); //@To-Do In dieser Activiity einlesen 
             
 
             lvMonsterarten = view.FindViewById<ListView>(Resource.Id.listViewMonsterarten_Uebersicht);

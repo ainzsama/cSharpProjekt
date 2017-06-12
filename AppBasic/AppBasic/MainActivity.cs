@@ -1,9 +1,9 @@
 ﻿using Android.App;
-using Android.Widget;
-using Android.OS;
-using System;
 using Android.Content;
+using Android.OS;
+using Android.Widget;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace AppBasic
@@ -16,6 +16,7 @@ namespace AppBasic
         Button btnDialog;
         Spieler spieler;
         List<Monsterart> monsterarten;
+        Button btnTestKampf;
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -31,11 +32,25 @@ namespace AppBasic
             btnDialog = (Button)FindViewById(Resource.Id.buttonLogDia);
 
 
+
             btnDialog.Click += StartLogIn;
+            btnTestKampf = FindViewById<Button>(Resource.Id.buttonStarteTestKampf);
+            btnTestKampf.Click += BtnTestKampf_Click;
             //Testspieler einfügen 
             spieler = Spieler.GetTestSpieler();
             spieler.Monster.Add(Monster.GetTestMonster());
+            spieler.Monster.Add(Monster.GetTestMonster());
             EinlesenMonsterarten(); //Später in Anm_OnAnmeldungComplete
+        }
+
+        private void BtnTestKampf_Click(object sender, EventArgs e)
+        {
+            Intent actTestKampf = new Intent(this, typeof(ActivityKampf));
+
+            //Übergabe Spieler
+            actTestKampf.PutExtra("spieler", JsonConvert.SerializeObject(spieler));
+            actTestKampf.PutExtra("gegner", JsonConvert.SerializeObject(Monster.GetTestMonster()));
+            StartActivity(actTestKampf);
         }
 
         private void StartLogIn(object sender, EventArgs e)

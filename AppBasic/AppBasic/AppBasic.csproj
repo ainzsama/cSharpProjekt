@@ -121,6 +121,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="Monsterart.cs" />
+    <Compile Include="Protokoll.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SlidingTabScrollView.cs" />
