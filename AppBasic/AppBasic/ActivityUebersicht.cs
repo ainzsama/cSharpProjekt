@@ -47,7 +47,15 @@ namespace AppBasic
             MenuInflater.Inflate(Resource.Menu.actionbar_map, menu);
             return base.OnCreateOptionsMenu(menu);
         }
-     
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch(item.ItemId)
+
+
+                default: return base.OnOptionsItemSelected(item);
+        }
+
     }
 
 
@@ -72,7 +80,7 @@ namespace AppBasic
 
     public class FragmentMonster : Android.Support.V4.App.Fragment
     {
-        private EditText mTxt;
+        private EditText txtSuche;
         private ListView lvMonsterarten;
         private List<Monsterart> monsterarten;
 
@@ -81,8 +89,9 @@ namespace AppBasic
             var view = inflater.Inflate(Resource.Layout.FragMonsterLayout, container, false);
 
             monsterarten = JsonConvert.DeserializeObject<List<Monsterart>>(Activity.Intent.GetStringExtra("monsterarten")); //@To-Do In dieser Activiity einlesen 
-            
 
+            txtSuche = view.FindViewById<EditText>(Resource.Id.editTextSucheUebersichtMonster);
+            txtSuche.Alpha = 0;
             lvMonsterarten = view.FindViewById<ListView>(Resource.Id.listViewMonsterarten_Uebersicht);
 
             ListViewAdapterMonster adapter = new ListViewAdapterMonster(Activity, monsterarten);

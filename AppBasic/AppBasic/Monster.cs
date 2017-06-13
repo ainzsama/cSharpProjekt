@@ -17,7 +17,7 @@ namespace AppBasic
     {
         private int monsterId;
         private int hp;  //wau wau
-        private int atk; //Kann weg
+       
         private String name; //unnötig -> in Monsterart
         private String nickname;
         private Marker marker;
@@ -29,7 +29,7 @@ namespace AppBasic
         private int lvl;
         private int xp;
         private int benoetigteXp;
-        private Typ typ;    //unnötig -> in Monsterart
+      
         //public static Monster GetTestMonster() //meins(LL)
         //{
         //    Monster m = new Monster();
@@ -119,18 +119,7 @@ namespace AppBasic
             }
         }
 
-        public int Atk
-        {
-            get
-            {
-                return atk;
-            }
-
-            set
-            {
-                atk = value;
-            }
-        }
+       
 
         public string Name
         {
@@ -223,7 +212,7 @@ namespace AppBasic
             }
         }
 
-        internal Typ Typ { get => typ; set => typ = value; }
+       
 
     }
 }

@@ -112,6 +112,7 @@
     <Compile Include="ActivityMap.cs" />
     <Compile Include="ActivityUebersicht.cs" />
     <Compile Include="Angriff.cs" />
+    <Compile Include="AnimationSuchfeld.cs" />
     <Compile Include="AuswahlMonster.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="DialogAnmeldung.cs" />
