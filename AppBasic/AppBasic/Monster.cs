@@ -17,8 +17,10 @@ namespace AppBasic
     {
         private int monsterId;
         private int hp;  //wau wau
+
        // private int atk; //Kann weg
      //   private String name; //unnötig -> in Monsterart
+
         private String nickname;
         private Marker marker;
 
@@ -51,6 +53,7 @@ namespace AppBasic
             m.Hp = 100;
             m.Angriff = new Angriff("Biss", 20, Typen.ErstelleTypen().ElementAt<Typ>(0));
             m.Art = new Monsterart("Beiserchen", 100, Resource.Drawable.monster1, 10, Typen.ErstelleTypen().ElementAt<Typ>(0));
+
             return m;
         }
         public static Monster GetTestMonster2()
@@ -62,6 +65,9 @@ namespace AppBasic
             m.Art = new Monsterart("Flämchen", 100, Resource.Drawable.monster2, 10, Typen.ErstelleTypen().ElementAt<Typ>(1));
             return m;
         }
+  
+
+
         //Teil von Lukas Wölfle
         public Monster()
         {

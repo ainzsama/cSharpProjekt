@@ -205,9 +205,11 @@
   <ItemGroup>
     <AndroidResource Include="Resources\layout\RegistrierungLayout.axml" />
   </ItemGroup>
+
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\monster2.png" />
   </ItemGroup>
+
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
