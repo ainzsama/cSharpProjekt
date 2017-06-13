@@ -22,6 +22,7 @@ namespace AppBasic
             typen.Add(new Typ(1,"Feuer",3));
             typen.Add(new Typ(2,"Wasser",1));
             typen.Add(new Typ(3,"Luft",0));
+            typen.Add(new Typ(4, "Testtyp", 0));
             return typen;
         }
     }

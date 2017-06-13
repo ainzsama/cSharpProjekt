@@ -6,9 +6,16 @@
     android:minWidth="25px"
     android:minHeight="25px"
     android:background="#E2E2E2">
-  <EditText
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:id="@+id/editText1"
-      android:textColor="#000" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextSucheUebersichtMonster"
+        android:textColor="#000"
+        android:hint="Durchsuchen" />
+    <ListView
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listViewMonsterarten_Uebersicht" />
 </LinearLayout>

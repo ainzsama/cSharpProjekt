@@ -16,12 +16,12 @@ namespace AppBasic
     {
         private Button button;
         private Monster monster;
-        public AuswahlMonster(ActivityKampf a, Monster m, int i )
+        public AuswahlMonster(ActivityKampf a, Monster m, int i)
         {
 
             Button = new Button(a);
-            Button.Text = m.Name + " lvl: " + m.Lvl;
-          //  Button.SetHeight(200);
+            Button.Text = m.Art.Name + " lvl: " + m.Lvl;
+            //  Button.SetHeight(200);
             Button.Click += delegate { a.Wechsel(m); };
         }
 
