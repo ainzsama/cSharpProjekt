@@ -51,8 +51,20 @@ namespace AppBasic
             m.Hp = 100;
             m.Angriff = new Angriff("Biss", 20, Typen.ErstelleTypen().ElementAt<Typ>(0));
             m.Art = new Monsterart("Beiserchen", 100, Resource.Drawable.monster1, 10, Typen.ErstelleTypen().ElementAt<Typ>(0));
+
             return m;
         }
+        public static Monster GetTestMonster2()
+        {
+            Monster m = new Monster();
+            m.MonsterId = 1;
+            m.Hp = 100;
+            m.Angriff = new Angriff("Pusten", 20, Typen.ErstelleTypen().ElementAt<Typ>(3));
+            m.Art = new Monsterart("Flämchen", 100, Resource.Drawable.monster2, 10, Typen.ErstelleTypen().ElementAt<Typ>(1));
+            return m;
+        }
+  
+
 
         //Teil von Lukas Wölfle
         public Monster()
@@ -121,18 +133,18 @@ namespace AppBasic
 
        
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
+        //public string Name
+        //{
+        //    get
+        //    {
+        //        return name;
+        //    }
 
-            set
-            {
-                name = value;
-            }
-        }
+        //    set
+        //    {
+        //        name = value;
+        //    }
+        //}
 
         public string Nickname
         {
