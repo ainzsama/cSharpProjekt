@@ -29,6 +29,7 @@ namespace AppBasic
         public event EventHandler<OnDatenCompleteEventArgs> OnDatenComplete;
         public event EventHandler<OnSpielerErhaltenEventArgs> OnSpielerErhalten;
         public event EventHandler<OnClientErrorEventArgs> OnClientError;
+        public event EventHandler<OnRegistVersuchtEventArgs> OnRegistVersucht;
         public Client()
         {
             connect();
@@ -92,7 +93,7 @@ namespace AppBasic
 
         private void CheckMessage(string m)
         {
-            string[] s = m.Split(Protokoll.TRENN);
+            string[] s = m.Split(new Char[] { Convert.ToChar(Protokoll.TRENN) });
 
             switch (s[0])
             {
@@ -107,6 +108,11 @@ namespace AppBasic
                     break;
                 case Protokoll.ANGRIFFE:
                     ErstelleAngriffeDatei(s[1]);
+                    break;
+                case Protokoll.REGISTRIERUNG:
+                    if (s[1].Equals("erfolgrreich"))
+                        OnRegistVersucht.Invoke(this, new OnRegistVersuchtEventArgs(true, null));
+                    else OnRegistVersucht.Invoke(this, new OnRegistVersuchtEventArgs(false, s[2]));
                     break;
                 default:
                     OnClientError.Invoke(this, new OnClientErrorEventArgs(m));
@@ -197,5 +203,19 @@ namespace AppBasic
         }
 
         public string Message { get => message; set => message = value; }
+    }
+
+    public class OnRegistVersuchtEventArgs : EventArgs
+    {
+        bool erfolg;
+        string fehler;
+
+        public OnRegistVersuchtEventArgs(bool b, string s)
+        {
+            Erfolg = b;
+            Fehler = s;
+        }
+        public bool Erfolg { get => erfolg; set => erfolg = value; }
+        public string Fehler { get => fehler; set => fehler = value; }
     }
 }

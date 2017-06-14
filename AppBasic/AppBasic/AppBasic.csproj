@@ -122,12 +122,14 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="Monsterart.cs" />
+    <Compile Include="MonsterUebertragung.cs" />
     <Compile Include="Protokoll.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SlidingTabScrollView.cs" />
     <Compile Include="SlidingTabStrip.cs" />
     <Compile Include="Spieler.cs" />
+    <Compile Include="SpielerUebertragung.cs" />
     <Compile Include="Typ.cs" />
     <Compile Include="Typen.cs" />
   </ItemGroup>
@@ -206,11 +208,9 @@
   <ItemGroup>
     <AndroidResource Include="Resources\layout\RegistrierungLayout.axml" />
   </ItemGroup>
-
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\monster2.png" />
   </ItemGroup>
-
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -14,7 +14,7 @@ namespace AppBasic
 {
     class Protokoll
     {
-        public const char TRENN = '#';
+        public const string TRENN = "#";
         public const string SPIELER = "SPL";
         public const string ANMELDUNG = "ANM";
         public const string ABMELDUNG = "ABM";

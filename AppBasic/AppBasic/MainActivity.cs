@@ -81,7 +81,7 @@ namespace AppBasic
             monsterarten = new List<Monsterart>();
 
             //XML Datei suchen -> aus datei lesen oder von Server anfordern und XML erstellen
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 5; i++)
             {
                 Monsterart m = Monsterart.GetTestMonsterart();
                 m.Name += i.ToString();

@@ -62,6 +62,13 @@ namespace AppBasic
             client = new Client(etIp.Text, 10000);
             client.OnAnmeldung += Client_OnAnmeldung;
             client.OnMessageRecieved += Client_OnMessage;
+            client.OnRegistVersucht += Client_OnRegistVersucht;
+        }
+
+        private void Client_OnRegistVersucht(object sender, OnRegistVersuchtEventArgs e)
+        {
+            if (e.Erfolg) txtStatus.Text = "Registrierung erfolgreich, bitte Anmeldedialog starten";
+            else txtStatus.Text = "Fehler;  " + e.Fehler;
         }
 
         private void Client_OnMessage(object sender, OnMessageReceivedEventArgs e)
@@ -78,5 +85,12 @@ namespace AppBasic
             }
             else txtStatus.Text = "Fehler";
         }
+        public override void OnActivityCreated(Bundle savedInstanceState)
+        {
+            Dialog.Window.RequestFeature(WindowFeatures.NoTitle);
+            base.OnActivityCreated(savedInstanceState);
+            Dialog.Window.Attributes.WindowAnimations = Resource.Style.dialogAnimation;
+        }
+
     }
 }
