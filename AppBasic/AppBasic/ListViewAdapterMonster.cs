@@ -41,11 +41,13 @@ namespace AppBasic
             }
 
             TextView txtName = row.FindViewById<TextView>(Resource.Id.textViewMonsterListViewRowName);
-            TextView txtAtk = row.FindViewById<TextView>(Resource.Id.textViewMonsterListViewRowAtk);
-            TextView txtXp = row.FindViewById<TextView>(Resource.Id.textViewMonsterListViewRowXp);
+            TextView txtTyp = row.FindViewById<TextView>(Resource.Id.textViewMonsterListViewRowTyp);
+            TextView txtHp = row.FindViewById<TextView>(Resource.Id.textViewMonsterListViewRowHp);
+            TextView txtStarkGegen = row.FindViewById<TextView>(Resource.Id.textViewMonsterListViewRowStarkGegen);
             txtName.Text = monster[position].Name;
-            txtAtk.Text = monster[position].Typ.Id.ToString();
-            txtXp.Text = monster[position].Sterbexp.ToString();
+            txtTyp.Text = monster[position].Typ.Name;
+            txtHp.Text = monster[position].Maxhp.ToString();
+            txtStarkGegen.Text = monster[position].Typ.Starkgegen.ToString();
             return row;
         }
 

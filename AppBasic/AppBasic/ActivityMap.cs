@@ -48,6 +48,9 @@ namespace AppBasic
 
         private List<Monster> activeMonsters;
 
+        private List<Monsterart> monsterarten;
+        private List<Angriff> angriffe;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -88,7 +91,9 @@ namespace AppBasic
             {
                 Log.Debug("CheckPermissions", "Permissions nicht ok");
                 RequestPermissions(PermissionsLocation, RequestLocationId);
-            }            
+            }
+            EinlesenMonsterarten();
+            EinlesenAngriffe();
         }
 
         private void OnClickUebersicht(object sender, EventArgs e)
@@ -145,10 +150,13 @@ namespace AppBasic
                 Log.Debug("Location", "Location" + location.ToString());
                 if (location != null)
                 {
-                    mMap.Clear();
-                    centerMap(location);
-                    for (int i = 0; i < 5; i++) generateMonster();
-                    Log.Debug("LocationClient", "letzte position erhalten");
+                    if (mMap != null)
+                    {
+                        mMap.Clear();
+                        centerMap(location);
+                        for (int i = 0; i < 5; i++) generateMonster();
+                        Log.Debug("LocationClient", "letzte position erhalten");
+                    }
                 }
                 else Log.Debug("LocationClient", "Position nicht erhalten");
             }
@@ -190,7 +198,20 @@ namespace AppBasic
             {
                 RequestPermissions(PermissionsLocation, RequestLocationId);
             }
-    }
+        }
+
+        private void EinlesenAngriffe()
+        {
+            angriffe = new List<Angriff>();
+            angriffe.Add(Angriff.GetTestAngriff());
+            //einlesen aus XML
+        }
+        private void EinlesenMonsterarten()
+        {
+            monsterarten = new List<Monsterart>();
+            monsterarten.Add(Monsterart.GetTestMonsterart());
+            //Lesen aus XML
+        }
         private void generateMonster()
         {
             Monster m = GetRandomMonster();
@@ -205,10 +226,6 @@ namespace AppBasic
         }
         public void OnConnected(Bundle connectionHint)
         {
-            // This method is called when we connect to the LocationClient. We can start location updated directly form
-            // here if desired, or we can do it in a lifecycle method, as shown above 
-
-            // You must implement this to implement the IGooglePlayServicesClientConnectionCallbacks Interface
             Log.Info("LocationClient", "Now connected to client");
             Location loc = LocationServices.FusedLocationApi.GetLastLocation(apiClient);
            
@@ -217,7 +234,18 @@ namespace AppBasic
 
         private Monster GetRandomMonster()
         {
-            return Monster.GetTestMonster();
+            Random r = new Random();
+            Monster m = new Monster();
+            m.Art = monsterarten.ElementAt(r.Next(0, monsterarten.Count - 1));
+            m.Nickname = m.Art.Name;
+            m.Angriff = angriffe.ElementAt(r.Next(0, angriffe.Count - 1));
+            m.Maxhp = m.Art.Maxhp;
+            m.Lvl = 1;
+            
+
+
+            return m;
+           // return Monster.GetTestMonster();
         }
 
         private LatLng GetRandomLatLng()
@@ -249,19 +277,13 @@ namespace AppBasic
         }
 
         public void OnConnectionFailed(ConnectionResult result)
-        {// This method is used to handle connection issues with the Google Play Services Client (LocationClient). 
-         // You can check if the connection has a resolution (bundle.HasResolution) and attempt to resolve it
-
-            // You must implement this to implement the IGooglePlayServicesClientOnConnectionFailedListener Interface
+        {
             Log.Info("LocationClient", "Connection failed, attempting to reach google play services"); throw new NotImplementedException();
         }
 
         public void OnLocationChanged(Location location)
         {
-            // This method returns changes in the user's location if they've been requested
-
-            // You must implement this to implement the Android.Gms.Locations.ILocationListener Interface
-
+            
             centerMap(location);
             Log.Debug("LocationClient", "Location updated");
 
@@ -275,12 +297,18 @@ namespace AppBasic
         public View GetInfoWindow(Marker marker)
         {
             View view = LayoutInflater.Inflate(Resource.Layout.MonsterInfo, null, false);
-            
+            ImageView bild = view.FindViewById<ImageView>(Resource.Id.imageViewMonsterInfoMap);
+            TextView name = view.FindViewById<TextView>(Resource.Id.textViewNameMonsterInfo);
+            TextView hp = view.FindViewById<TextView>(Resource.Id.textViewHpMonsterInfo);
+            TextView atk = view.FindViewById<TextView>(Resource.Id.textViewAtkMonsterInfo);
             foreach (Monster m in activeMonsters)
             {
                 if(m.Marker.Equals(marker))
                 {
-                    //Infos einfügen
+                    bild.SetImageResource(m.Art.Pic);
+                    name.Text = m.Nickname;
+                    hp.Text = m.Maxhp.ToString();
+                    atk.Text = m.Angriff.Name;
                 }
             }
             return view;

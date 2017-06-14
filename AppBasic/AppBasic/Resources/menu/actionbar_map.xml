@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--For all properties see: http://developer.android.com/guide/topics/resources/menu-resource.html-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:id="@+id/menu"
+  <item android:id="@+id/search"
         android:showAsAction="always"
-        android:title="options"
+        android:title="search"
+        
         />
 
 </menu>

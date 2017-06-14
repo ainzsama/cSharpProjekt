@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace AppBasic
 {
-    class Spieler 
+    public class Spieler 
     {
         private int spielerId;
         private String name;

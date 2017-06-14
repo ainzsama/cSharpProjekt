@@ -11,12 +11,17 @@ namespace AppBasic
     [Activity(Label = "AppBasic", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
-        Button btnLogin;
-        Button btnRegist;
-        Button btnDialog;
-        Spieler spieler;
-        List<Monsterart> monsterarten;
-        Button btnTestKampf;
+        private Button btnLogin;
+        private Button btnRegist;
+        private Button btnDialog;
+        private Button btnTestKampf;
+
+
+        private Spieler spieler;
+        private List<Monsterart> monsterarten;
+
+        internal Spieler Spieler { get => spieler; set => spieler = value; }
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -37,9 +42,9 @@ namespace AppBasic
             btnTestKampf = FindViewById<Button>(Resource.Id.buttonStarteTestKampf);
             btnTestKampf.Click += BtnTestKampf_Click;
             //Testspieler einfügen 
-            spieler = Spieler.GetTestSpieler();
-            spieler.Monster.Add(Monster.GetTestMonster());
-            spieler.Monster.Add(Monster.GetTestMonster());
+            Spieler = Spieler.GetTestSpieler();
+            Spieler.Monster.Add(Monster.GetTestMonster());
+            Spieler.Monster.Add(Monster.GetTestMonster());
             EinlesenMonsterarten(); //Später in Anm_OnAnmeldungComplete
         }
 
@@ -48,7 +53,7 @@ namespace AppBasic
             Intent actTestKampf = new Intent(this, typeof(ActivityKampf));
 
             //Übergabe Spieler
-            actTestKampf.PutExtra("spieler", JsonConvert.SerializeObject(spieler));
+            actTestKampf.PutExtra("spieler", JsonConvert.SerializeObject(Spieler));
             actTestKampf.PutExtra("gegner", JsonConvert.SerializeObject(Monster.GetTestMonster()));
             StartActivity(actTestKampf);
         }
@@ -57,8 +62,18 @@ namespace AppBasic
         {
             FragmentTransaction trans = FragmentManager.BeginTransaction();
             DialogAnmeldung anm = new DialogAnmeldung();
-            anm.Show(trans, "AnmeldeDialog");
             anm.OnAnmeldungComplete += Anm_OnAnmeldungComplete;
+            anm.Show(trans, "AnmeldeDialog");
+        }
+
+        private void Anm_OnAnmeldungComplete(object sender, OnSingnUpEventArgs e)
+        {
+            Intent actMap = new Intent(this, typeof(ActivityMap));
+
+            //Übergabe Spieler
+            actMap.PutExtra("spieler", JsonConvert.SerializeObject(e.Spieler));
+            //actMap.PutExtra("monsterarten", JsonConvert.SerializeObject(monsterarten));
+            StartActivity(actMap);
         }
 
         private void EinlesenMonsterarten()
@@ -75,10 +90,7 @@ namespace AppBasic
 
             
         }
-        private void Anm_OnAnmeldungComplete(object sender, OnSingnUpEventArgs e)
-        {
-           
-        }
+      
 
         private void OnBtnRegistClick(object sender, EventArgs e)
         {
@@ -95,8 +107,8 @@ namespace AppBasic
             Intent actMap = new Intent(this, typeof(ActivityMap));
             
             //Übergabe Spieler
-            actMap.PutExtra("spieler", JsonConvert.SerializeObject(spieler));
-            actMap.PutExtra("monsterarten", JsonConvert.SerializeObject(monsterarten));
+            actMap.PutExtra("spieler", JsonConvert.SerializeObject(Spieler));
+            //actMap.PutExtra("monsterarten", JsonConvert.SerializeObject(monsterarten));
             StartActivity(actMap);
         }
 

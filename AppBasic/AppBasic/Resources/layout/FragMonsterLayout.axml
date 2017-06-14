@@ -3,19 +3,70 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:minWidth="25px"
-    android:minHeight="25px"
-    android:background="#E2E2E2">
+    android:background="#E2E2E2"
+    android:weightSum="100">
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editTextSucheUebersichtMonster"
         android:textColor="#000"
-        android:hint="Durchsuchen" />
+        android:hint="Durchsuchen"
+        android:layout_weight="10" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:background="#E2E2E2"
+        android:weightSum="100">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:gravity="center_horizontal"
+            android:id="@+id/textViewNameUebersichtMonster"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:text="Name" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:gravity="center_horizontal"
+            android:id="@+id/textViewTypUebersichtMonster"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:text="Typ" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:gravity="center_horizontal"
+            android:id="@+id/textViewHpUebersichtMonster"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:text="Hp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:gravity="center_horizontal"
+            android:id="@+id/textViewStarkGegenUebersichtMonster"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:text="Stark gegen" />
+    </LinearLayout>
+    <View
+        android:layout_height="2dp"
+        android:layout_width="match_parent"
+        android:background="#000" />
     <ListView
         android:minWidth="25px"
         android:minHeight="25px"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listViewMonsterarten_Uebersicht" />
+        android:id="@+id/listViewMonsterarten_Uebersicht"
+        android:layout_weight="85"
+        android:divider="#101010"
+        android:dividerHeight="1dp" />
 </LinearLayout>

@@ -47,7 +47,7 @@ namespace AppBasic
             btnReg.Enabled = false;
             btnReg.Click += BtnReg_Click;
 
-
+            
 
             return view;
         }
@@ -61,7 +61,7 @@ namespace AppBasic
         {
             client = new Client(etIp.Text, 10000);
             client.OnAnmeldung += Client_OnAnmeldung;
-            client.OnMessage += Client_OnMessage;
+            client.OnMessageRecieved += Client_OnMessage;
         }
 
         private void Client_OnMessage(object sender, OnMessageReceivedEventArgs e)

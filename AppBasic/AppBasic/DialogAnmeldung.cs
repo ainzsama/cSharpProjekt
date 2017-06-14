@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.IO;
 
 namespace AppBasic
 {
@@ -39,7 +40,7 @@ namespace AppBasic
             btnAnm = view.FindViewById<Button>(Resource.Id.buttonLogIn);
             btnAnm.Enabled = false;
             btnAnm.Click += btnAnm_Click;
-
+            
             //VerbindungsButton
             btnCon = view.FindViewById<Button>(Resource.Id.buttonVerbinden);
             btnCon.Click += BtnCon_Click;
@@ -51,8 +52,32 @@ namespace AppBasic
         {
             client = new Client(etIp.Text, 10000);
             client.OnAnmeldung += Client_OnAnmeldung;
-            client.OnMessage += Client_OnMessage;
+            client.OnMessageRecieved += Client_OnMessage;
+            client.OnDatenComplete += Client_OnDatenComplete;
+            client.OnSpielerErhalten += Client_OnSpielerErhalten;
+            client.OnClientError += Client_OnClientError;
             client.connect();
+        }
+
+        private void Client_OnClientError(object sender, OnClientErrorEventArgs e)
+        {
+            txtStatus.Text = e.Message;
+        }
+
+        private void Client_OnSpielerErhalten(object sender, OnSpielerErhaltenEventArgs e)
+        {
+            txtStatus.Text = "Spieler erhalten";
+            OnAnmeldungComplete.Invoke(this, new OnSingnUpEventArgs(e.Spieler.Name, e.Spieler));
+        }
+
+        private void Client_OnDatenComplete(object sender, OnDatenCompleteEventArgs e)
+        {
+            if (e.Complete)
+            {
+                txtStatus.Text = "Daten erhalten";
+                btnAnm.Enabled = true;
+            }
+            else txtStatus.Text = "Fehler -> Daten nicht erhalten";//Fehler bei Dateien -> neu verbinden
         }
 
         private void Client_OnMessage(object sender, OnMessageReceivedEventArgs e)
@@ -65,14 +90,32 @@ namespace AppBasic
             if (e.Erfolg)
             {
                 txtStatus.Text = "erfolgreich";
-                btnAnm.Enabled = true;
+                if (!CheckData())
+                    GetData();
+                else btnAnm.Enabled = true;
             }
             else txtStatus.Text = "Fehler";
         }
 
+        private bool CheckData()
+        {
+            bool vorhanden = true;
+            
+
+            if (!File.Exists(Protokoll.PFADART) || !File.Exists(Protokoll.PFADANGR)) vorhanden = false;
+          
+
+            return vorhanden;
+        }
+
+        private void GetData()
+        {
+            client.ErfrageDaten();
+        }
+
         private void btnAnm_Click(object sender, EventArgs e)
         {
-            client.sendMessage("ANM#" + etName.Text + "#" + etPw.Text);
+            client.sendMessage(Protokoll.ANMELDUNG + Protokoll.TRENN + etName.Text + Protokoll.TRENN + etPw.Text);
         }
 
         public override void OnActivityCreated(Bundle savedInstanceState)
@@ -86,15 +129,18 @@ namespace AppBasic
     public class OnSingnUpEventArgs : EventArgs
     {
         private string name;
-        private string pw;
+     
+        private Spieler spieler;
 
         public string Name { get => name; set => name = value; }
-        public string Pw { get => pw; set => pw = value; }
+       
+        public Spieler Spieler { get => spieler; set => spieler = value; }
 
-        public OnSingnUpEventArgs(string name, string pw) : base()
+        public OnSingnUpEventArgs(string name, Spieler s) : base()
         {
             Name = name;
-            Pw = pw;
+         
+            Spieler = s;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace AppBasic
         private int monsterId;
         private int hp;  //wau wau
        
-        private String name; //unnötig -> in Monsterart
+        
         private String nickname;
         private Marker marker;
 

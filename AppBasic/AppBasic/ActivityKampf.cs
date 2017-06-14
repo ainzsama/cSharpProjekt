@@ -132,18 +132,7 @@ namespace AppBasic
 
         }
 
-        private void Runter()
-        {
-            if (gezeigt < monsterauswahl.Length - 6)
-            {
-                monsteranzeige.RemoveAllViews();
-                gezeigt++;
-                for (int i = gezeigt; i < gezeigt + 5; i++)
-                {
-                    monsteranzeige.AddView(monsterauswahl[i].Button);
-                }
-            }
-        }
+     
 
         private void Angriff()
         {
