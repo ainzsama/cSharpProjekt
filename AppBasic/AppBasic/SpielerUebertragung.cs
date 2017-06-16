@@ -14,7 +14,7 @@ using Android.Widget;
 
 namespace AppBasic
 {
-    class SpielerUebertragung
+    public class SpielerUebertragung
     {
         private int spielerId;
         private String name;
@@ -25,7 +25,7 @@ namespace AppBasic
 
         public SpielerUebertragung()
         {
-            //monster = new List<AppBasic.Monster>();
+            monster = new List<MonsterUebertragung>();
         }
 
         public string Name { get => name; set => name = value; }

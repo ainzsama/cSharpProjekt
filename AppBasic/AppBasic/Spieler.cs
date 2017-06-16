@@ -25,6 +25,16 @@ namespace AppBasic
             monster = new List<AppBasic.Monster>();
         }
 
+        public Spieler(SpielerUebertragung s)
+        {
+            SpielerId = s.SpielerId;
+            Name = s.Name;
+            Logdaten = s.Logdaten;
+            monster = new List<AppBasic.Monster>();
+            foreach (MonsterUebertragung m in s.Monster) Monster.Add(new AppBasic.Monster(m));
+
+
+        }
         public string Name { get => name; set => name = value; }
         public Logdaten Logdaten { get => logdaten; set => logdaten = value; }
         public List<Monster> Monster { get => monster; set => monster = value; }

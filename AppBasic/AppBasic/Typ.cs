@@ -24,6 +24,11 @@ namespace AppBasic
             Name = name;
             Id = id;
         }
+
+        public Typ()
+        {
+
+        }
         public string Name { get => name; set => name = value; }
         public int Id { get => id; set => id = value; }
         public int Starkgegen { get => starkgegen; set => starkgegen = value; }

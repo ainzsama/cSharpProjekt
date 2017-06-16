@@ -29,7 +29,7 @@ using AlertDialog = Android.Support.V7.App.AlertDialog;
 namespace AppBasic
 {
     [Activity(Label = "ActivityMap")]
-    public class ActivityMap : Activity, IOnMapReadyCallback, GoogleApiClient.IConnectionCallbacks, GoogleApiClient.IOnConnectionFailedListener, Android.Gms.Location.ILocationListener, Android.Gms.Maps.GoogleMap.IInfoWindowAdapter
+    public class ActivityMap : Activity, IOnMapReadyCallback, GoogleApiClient.IConnectionCallbacks, GoogleApiClient.IOnConnectionFailedListener, Android.Gms.Location.ILocationListener, Android.Gms.Maps.GoogleMap.IInfoWindowAdapter, Android.Gms.Maps.GoogleMap.IOnInfoWindowClickListener
     {
         private readonly string[] PermissionsLocation = { Manifest.Permission.AccessCoarseLocation, Manifest.Permission.AccessFineLocation };
         const int RequestLocationId = 0;
@@ -135,6 +135,8 @@ namespace AppBasic
                     CameraPosition camPos = builder.Build();
 
                     mMap.MoveCamera(CameraUpdateFactory.NewCameraPosition(camPos));
+
+                    if (activeMonsters.Count == 0) for (int i = 0; i < 5; i++) generateMonster();
                 }
             }
         }
@@ -147,7 +149,7 @@ namespace AppBasic
             if (apiClient.IsConnected)
             {
                 Location location = LocationServices.FusedLocationApi.GetLastLocation(apiClient);
-                Log.Debug("Location", "Location" + location.ToString());
+                
                 if (location != null)
                 {
                     if (mMap != null)
@@ -186,6 +188,7 @@ namespace AppBasic
             mMap = googleMap;
             mMap.UiSettings.CompassEnabled = true;
             mMap.SetInfoWindowAdapter(this);
+            mMap.SetOnInfoWindowClickListener(this);
            
             try
             {
@@ -325,6 +328,12 @@ namespace AppBasic
             }
             return false;
 
+        }
+
+        public void OnInfoWindowClick(Marker marker)
+        {
+            List<Monster> result = (from monster in activeMonsters where monster.Marker == marker select monster).ToList();
+            starteKampf(result.FirstOrDefault());
         }
     }
 }

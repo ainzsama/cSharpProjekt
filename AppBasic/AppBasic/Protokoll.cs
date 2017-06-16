@@ -9,10 +9,11 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.IO;
 
 namespace AppBasic
 {
-    class Protokoll
+    public class Protokoll
     {
         public const string TRENN = "#";
         public const string SPIELER = "SPL";
@@ -25,5 +26,15 @@ namespace AppBasic
 
         public const string PFADART = "Monsterarten.xml";
         public const string PFADANGR = "Angriffe.xml";
+
+        public static string GetPathArten()
+        {
+            return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "arten.xml");
+        }
+
+        public static string GetPathAngriffe()
+        {
+            return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "angriffe.xml");
+        }
     }
 }

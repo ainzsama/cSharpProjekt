@@ -20,6 +20,9 @@ namespace AppBasic
         private int pic;
         private Typ typ;
         private int sterbexp;
+        public Monsterart()
+        { }
+
         public Monsterart(String name, int maxhp, int pic,int hpzunahme,Typ typ)
         {
             Typ = typ;

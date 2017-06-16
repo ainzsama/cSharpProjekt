@@ -33,7 +33,9 @@ namespace AppBasic
 
             etIp = view.FindViewById<EditText>(Resource.Id.editTextIp);
             etName = view.FindViewById<EditText>(Resource.Id.editTextName_AnmDialog);
+            etName.Text = "tester";
             etPw = view.FindViewById<EditText>(Resource.Id.editTextPW_AnmDialog);
+            etPw.Text = "Test";
             txtStatus = view.FindViewById<TextView>(Resource.Id.textViewStatus);
 
             //AnmeldeButton 
@@ -42,9 +44,15 @@ namespace AppBasic
             btnAnm.Click += btnAnm_Click;
             
             //VerbindungsButton
-            btnCon = view.FindViewById<Button>(Resource.Id.buttonVerbinden);
-            btnCon.Click += BtnCon_Click;
-
+            //btnCon = view.FindViewById<Button>(Resource.Id.buttonVerbinden);
+            //btnCon.Click += BtnCon_Click;
+            client = new Client(etIp.Text, 10000);
+            client.OnAnmeldung += Client_OnAnmeldung;
+            client.OnMessageRecieved += Client_OnMessage;
+            client.OnDatenComplete += Client_OnDatenComplete;
+            client.OnSpielerErhalten += Client_OnSpielerErhalten;
+            client.OnClientError += Client_OnClientError;
+            client.connect();
             return view;
         }
 
@@ -61,25 +69,35 @@ namespace AppBasic
 
         private void Client_OnClientError(object sender, OnClientErrorEventArgs e)
         {
-            txtStatus.Text = e.Message;
+            ChangeStatusText(e.Message);
         }
 
         private void Client_OnSpielerErhalten(object sender, OnSpielerErhaltenEventArgs e)
         {
-            txtStatus.Text = "Spieler erhalten";
-            OnAnmeldungComplete.Invoke(this, new OnSingnUpEventArgs(e.Spieler.Name, e.Spieler));
+           ChangeStatusText("Spieler erhalten");
+            
+           OnAnmeldungComplete.Invoke(this, new OnSingnUpEventArgs(e.Spieler.Name, e.Spieler));
         }
 
         private void Client_OnDatenComplete(object sender, OnDatenCompleteEventArgs e)
         {
             if (e.Complete)
             {
-                txtStatus.Text = "Daten erhalten";
-                btnAnm.Enabled = true;
+                ChangeStatusText("Daten erhalten");
+                ChangeStateBtnAnm(true);
             }
-            else txtStatus.Text = "Fehler -> Daten nicht erhalten";//Fehler bei Dateien -> neu verbinden
+            else ChangeStatusText("Fehler -> Daten nicht erhalten"); //Fehler bei Dateien -> neu verbinden
         }
 
+        private  void ChangeStatusText(string t)
+        {
+            Activity.RunOnUiThread(() => { txtStatus.Text = t; });
+        }
+
+        private void ChangeStateBtnAnm(bool b)
+        {
+            Activity.RunOnUiThread(() => { btnAnm.Enabled = true; });
+        }
         private void Client_OnMessage(object sender, OnMessageReceivedEventArgs e)
         {
             txtStatus.Text = e.Message;
@@ -91,7 +109,12 @@ namespace AppBasic
             {
                 txtStatus.Text = "erfolgreich";
                 if (!CheckData())
+                {
+                    txtStatus.Text = "PruefeDaten";
                     GetData();
+                }
+                //GetData();
+            
                 else btnAnm.Enabled = true;
             }
             else txtStatus.Text = "Fehler";
@@ -102,7 +125,7 @@ namespace AppBasic
             bool vorhanden = true;
             
 
-            if (!File.Exists(Protokoll.PFADART) || !File.Exists(Protokoll.PFADANGR)) vorhanden = false;
+            if (!File.Exists(Protokoll.GetPathArten()) || !File.Exists(Protokoll.GetPathAngriffe())) vorhanden = false;
           
 
             return vorhanden;

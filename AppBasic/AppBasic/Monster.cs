@@ -50,7 +50,7 @@ namespace AppBasic
             Monster m = new Monster();
             m.MonsterId = 1;
             m.Hp = 100;
-            m.Angriff = new Angriff("Biss", 20, Typen.ErstelleTypen().ElementAt<Typ>(0));
+            m.Angriff = new Angriff(1, "Biss", 20, Typen.ErstelleTypen().ElementAt<Typ>(0));
             m.Art = new Monsterart("Beiserchen", 100, Resource.Drawable.monster1, 10, Typen.ErstelleTypen().ElementAt<Typ>(0));
 
             return m;
@@ -60,9 +60,23 @@ namespace AppBasic
             Monster m = new Monster();
             m.MonsterId = 1;
             m.Hp = 100;
-            m.Angriff = new Angriff("Pusten", 20, Typen.ErstelleTypen().ElementAt<Typ>(3));
+            m.Angriff = new Angriff(2, "Pusten", 20, Typen.ErstelleTypen().ElementAt<Typ>(3));
             m.Art = new Monsterart("Flämchen", 100, Resource.Drawable.monster2, 10, Typen.ErstelleTypen().ElementAt<Typ>(1));
             return m;
+        }
+
+        public Monster(MonsterUebertragung m)
+        {
+            MonsterId = m.MonsterId;
+            Art = m.Art;
+            Marker = null;
+            Angriff = m.Angriff;
+            Nickname = m.Nickname;
+            Hp = m.Hp;
+            Maxhp = m.Maxhp;
+            Lvl = m.Lvl;
+            Xp = m.Xp;
+            BenoetigteXp = m.BenoetigteXp;
         }
   
 

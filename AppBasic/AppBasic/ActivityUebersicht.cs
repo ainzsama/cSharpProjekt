@@ -12,6 +12,8 @@ using Android.Widget;
 using Android.Support.V4.App;
 using Android.Support.V4.View;
 using Newtonsoft.Json;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace AppBasic
 {
@@ -91,9 +93,11 @@ namespace AppBasic
         private TextView txtHp;
         private TextView txtStarkGegen;
         private List<Monsterart> monsterarten;
+        private List<Angriff> angriffe;
 
         private ListViewAdapterMonster adapter;
         private List<Monsterart> selected;
+        private List<Monsterart> gefiltert;
         private bool nameAsc;
         private bool hpAsc;
         private bool typAsc;
@@ -104,8 +108,10 @@ namespace AppBasic
         {
             var view = inflater.Inflate(Resource.Layout.FragMonsterLayout, container, false);
 
-            monsterarten = JsonConvert.DeserializeObject<List<Monsterart>>(Activity.Intent.GetStringExtra("monsterarten")); //@To-Do In dieser Activiity einlesen 
+            monsterarten = EinlesenMonsterarten();
+            angriffe = EinlesenAngriffe(); 
             selected = monsterarten;
+            gefiltert = monsterarten;
             txtName = view.FindViewById<TextView>(Resource.Id.textViewNameUebersichtMonster);
             txtTyp = view.FindViewById<TextView>(Resource.Id.textViewTypUebersichtMonster);
             txtHp = view.FindViewById<TextView>(Resource.Id.textViewHpUebersichtMonster);
@@ -129,9 +135,23 @@ namespace AppBasic
             return view;
         }
 
+        private List<Monsterart> EinlesenMonsterarten()
+        {
+            FileStream fs = new FileStream(Protokoll.GetPathArten(), FileMode.Open);
+            XmlSerializer xml = new XmlSerializer(typeof(List<Monsterart>));
+
+            return (List<Monsterart>)xml.Deserialize(fs);
+        }
+
+        private List<Angriff> EinlesenAngriffe()
+        {
+            FileStream fs = new FileStream(Protokoll.GetPathAngriffe(), FileMode.Open);
+            XmlSerializer xml = new XmlSerializer(typeof(List<Angriff>));
+
+            return (List<Angriff>)xml.Deserialize(fs);
+        }
         private void TxtStarkGegen_Click(object sender, EventArgs e)
         {
-            List<Monsterart> gefiltert;
 
             if (!starkGegenAsc)
             {
@@ -150,7 +170,7 @@ namespace AppBasic
 
         private void TxtHp_Click(object sender, EventArgs e)
         {
-            List<Monsterart> gefiltert;
+           
 
             if (!hpAsc)
             {
@@ -169,7 +189,7 @@ namespace AppBasic
 
         private void TxtTyp_Click(object sender, EventArgs e)
         {
-            List<Monsterart> gefiltert;
+            
 
             if (!typAsc)
             {
@@ -188,7 +208,7 @@ namespace AppBasic
 
         private void TxtName_Click(object sender, EventArgs e)
         {
-            List<Monsterart> gefiltert;
+           
 
             if (!nameAsc)
             {
@@ -208,13 +228,17 @@ namespace AppBasic
         private void TxtSuche_TextChanged(object sender, Android.Text.TextChangedEventArgs e)
         {
             selected = (from monsterart in monsterarten where monsterart.Name.ToLower().Contains(etSuche.Text.ToLower()) || monsterart.Typ.Name.ToLower().Contains(etSuche.Text.ToLower()) select monsterart).ToList<Monsterart>();
+            gefiltert = selected;
             adapter = new ListViewAdapterMonster(Activity, selected);
             lvMonsterarten.Adapter = adapter;
         }
 
         private void LvMonsterarten_ItemLongClick(object sender, AdapterView.ItemLongClickEventArgs e)
         {
-            //Anzeigen ausführliche Infos
+            Android.Support.V4.App.FragmentTransaction trans = FragmentManager.BeginTransaction();
+
+            DialogAnzeigenMonsterbild d = new DialogAnzeigenMonsterbild(gefiltert.ElementAt(e.Position).Pic);
+            d.Show(trans, "");
         }
 
         private void LvMonsterarten_ItemClick(object sender, AdapterView.ItemClickEventArgs e)

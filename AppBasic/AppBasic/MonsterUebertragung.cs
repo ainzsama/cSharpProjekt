@@ -50,6 +50,7 @@ namespace AppBasic
         {
 
         }
+
         public MonsterUebertragung(Angriff angriff, Monsterart art)
         {
             Angriff = angriff;

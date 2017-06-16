@@ -45,7 +45,7 @@ namespace AppBasic
             Spieler = Spieler.GetTestSpieler();
             Spieler.Monster.Add(Monster.GetTestMonster());
             Spieler.Monster.Add(Monster.GetTestMonster());
-            EinlesenMonsterarten(); //Später in Anm_OnAnmeldungComplete
+           
         }
 
         private void BtnTestKampf_Click(object sender, EventArgs e)
@@ -76,25 +76,13 @@ namespace AppBasic
             StartActivity(actMap);
         }
 
-        private void EinlesenMonsterarten()
-        {
-            monsterarten = new List<Monsterart>();
-
-            //XML Datei suchen -> aus datei lesen oder von Server anfordern und XML erstellen
-            for (int i = 0; i < 5; i++)
-            {
-                Monsterart m = Monsterart.GetTestMonsterart();
-                m.Name += i.ToString();
-                monsterarten.Add(m);
-            }
-
-            
-        }
+       
       
 
         private void OnBtnRegistClick(object sender, EventArgs e)
         {
             FragmentTransaction trans = FragmentManager.BeginTransaction();
+            
             DialogRegistrierung reg = new DialogRegistrierung();
             reg.Show(trans, "Registrierungsdialog");
             reg.OnRegistrierungComplete += Anm_OnAnmeldungComplete;

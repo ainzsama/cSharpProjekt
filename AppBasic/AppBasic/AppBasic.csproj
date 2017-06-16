@@ -116,6 +116,7 @@
     <Compile Include="AuswahlMonster.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="DialogAnmeldung.cs" />
+    <Compile Include="DialogAnzeigenMonsterbild.cs" />
     <Compile Include="DialogRegistrierung.cs" />
     <Compile Include="ListViewAdapterMonster.cs" />
     <Compile Include="Logdaten.cs" />
@@ -166,6 +167,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\layout\AnmeldungLayout.axml" />
     <AndroidResource Include="Resources\layout\ListViewRowMonster.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\DialogAnzeigenMonsterbildLayout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

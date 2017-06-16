@@ -14,11 +14,18 @@ namespace AppBasic
 {
     public class Angriff
     {
+        private int id;
         private String name;
         private int schaden;
         private Typ typ;
-        public Angriff(String name, int schaden,Typ typ)
+
+        public Angriff()
         {
+
+        }
+        public Angriff(int id, String name, int schaden,Typ typ)
+        {
+            Id = id;
             Typ = typ;
             Schaden = schaden;
             Name = name;
@@ -57,9 +64,11 @@ namespace AppBasic
             }
         }
 
+        public int Id { get => id; set => id = value; }
+
         public static Angriff GetTestAngriff()
         {
-            return new Angriff("Test", 22, Typ.GetTestTyp());
+            return new Angriff(-1, "Test", 22, Typ.GetTestTyp());
         }
     }
 }
