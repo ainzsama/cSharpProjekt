@@ -5,6 +5,7 @@ using Android.Widget;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace AppBasic
 {
@@ -48,6 +49,7 @@ namespace AppBasic
            
         }
 
+       
         private void BtnTestKampf_Click(object sender, EventArgs e)
         {
             Intent actTestKampf = new Intent(this, typeof(ActivityKampf));
@@ -93,14 +95,14 @@ namespace AppBasic
             //Starte nächste Activity
 
             Intent actMap = new Intent(this, typeof(ActivityMap));
-            
+
             //Übergabe Spieler
             actMap.PutExtra("spieler", JsonConvert.SerializeObject(Spieler));
             //actMap.PutExtra("monsterarten", JsonConvert.SerializeObject(monsterarten));
             StartActivity(actMap);
         }
 
-        
+
     }
 }
 

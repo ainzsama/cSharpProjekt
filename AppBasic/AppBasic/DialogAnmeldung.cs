@@ -32,6 +32,7 @@ namespace AppBasic
             var view = inflater.Inflate(Resource.Layout.AnmeldungLayout, container, false);
 
             etIp = view.FindViewById<EditText>(Resource.Id.editTextIp);
+            etIp.Text = "192.168.178.97";
             etName = view.FindViewById<EditText>(Resource.Id.editTextName_AnmDialog);
             etName.Text = "tester";
             etPw = view.FindViewById<EditText>(Resource.Id.editTextPW_AnmDialog);
@@ -108,14 +109,15 @@ namespace AppBasic
             if (e.Erfolg)
             {
                 txtStatus.Text = "erfolgreich";
+                GetData();
                 if (!CheckData())
                 {
                     txtStatus.Text = "PruefeDaten";
                     GetData();
                 }
-                //GetData();
             
                 else btnAnm.Enabled = true;
+                btnAnm.Enabled = true;
             }
             else txtStatus.Text = "Fehler";
         }

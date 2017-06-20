@@ -24,8 +24,6 @@ namespace AppBasic
         public const string ARTEN = "ARTEN";
         public const string ANGRIFFE = "ANGRIFFE";
 
-        public const string PFADART = "Monsterarten.xml";
-        public const string PFADANGR = "Angriffe.xml";
 
         public static string GetPathArten()
         {

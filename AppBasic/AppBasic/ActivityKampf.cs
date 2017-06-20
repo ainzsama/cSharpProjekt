@@ -35,6 +35,7 @@ namespace AppBasic
         private Button buttondown;
         private TableLayout menu;
         private TextView label;
+        private EventHandler angreifen;
 
         
         protected override void OnCreate(Bundle savedInstanceState)
@@ -46,6 +47,7 @@ namespace AppBasic
             spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler"));
             gegner = JsonConvert.DeserializeObject<Monster>(Intent.GetStringExtra("gegner"));
             spieler.Monster.Add(Monster.GetTestMonster());
+           
             /*spieler = new Spieler();
             spieler.Monster = new List<Monster>();
             spieler.Monster.Add(Monster.GetTestMonster());
@@ -63,16 +65,13 @@ namespace AppBasic
             
             angriff = FindViewById<Button>(Resource.Id.buttonAngriff);
             FindViewById<Button>(Resource.Id.buttonMonster).Click += delegate { MonsterWechseln(); };
-            FindViewById<Button>(Resource.Id.buttonFlucht).Click += delegate { Beenden(); };
+            FindViewById<Button>(Resource.Id.buttonFlucht).Click += delegate { Textanzeigen("Testtext", 100000); };//Beenden(); };
             
             ausgewaehltesMonster = spieler.Monster.ElementAt<Monster>(0);
             AnzeigenLeben();
             AnzeigenBilder();
             spieler.Typen = Typen.ErstelleTypen();
-            angriff.Click += delegate
-            {
-                Angriff();
-            };
+            angriff.Click += (e, f) => { new Thread(Angriff).Start(); };
 
             foreach(Monster m in spieler.Monster)
             {
@@ -109,20 +108,30 @@ namespace AppBasic
         }
         private void Textanzeigen(String text, int dauer)
         {
-            hauptlayout.RemoveView(angriff);
-            hauptlayout.RemoveView(menu);
-            label = new TextView(this);
-            label.Click += delegate { Thread.CurrentThread.Interrupt(); };
-            label.Text = text;
-            hauptlayout.AddView(label);
-            try
-            {
-                Thread.Sleep(dauer);
-            }
-            catch (Exception)
-            {
-            }
-            Textverschwindet();
+            //hauptlayout.RemoveView(angriff);
+            //hauptlayout.RemoveView(menu);
+            //label = new TextView(this);
+            //label.Click += delegate { Thread.CurrentThread.Interrupt(); };
+            //label.Text = text;
+            //hauptlayout.AddView(label);
+            //try
+            //{
+            //    Thread.Sleep(10000);
+            //}
+            //catch (Exception)
+            //{
+            //}
+            //Textverschwindet();
+
+            //Toast.MakeText(this, text, ToastLength.Short).Show();
+            RunOnUiThread(() => { angriff.Text = text; });
+            RunOnUiThread(() => { angriff.Enabled = false; });
+            Thread.Sleep(2000);
+            RunOnUiThread(() => { angriff.Enabled = true; });
+            RunOnUiThread(() => { angriff.Text = "Angriff"; });
+            
+            //AnzeigenLeben();
+           
         }
         private void Textverschwindet()
         {
@@ -132,13 +141,16 @@ namespace AppBasic
 
         }
 
+       
      
 
         private void Angriff()
         {
             if (gegner.Verteidigen(ausgewaehltesMonster.Angriff))
             {
-                Textanzeigen("Dein Monster greift an",2000);
+                AnzeigenLeben();
+                Textanzeigen("Dein Monster greift an", 2000);
+                
                 if (ausgewaehltesMonster.Verteidigen(gegner.Angriff))
                 {
                     Textanzeigen("Das gegnerische Monster greift an", 2000);
@@ -242,10 +254,7 @@ namespace AppBasic
                 AnzeigenLeben();
                 AnzeigenBilder();
                 spieler.Typen = Typen.ErstelleTypen();
-                angriff.Click += delegate
-                {
-                    Angriff();
-                };
+                angriff.Click += angreifen;
                 AnzeigenLeben();
                 AnzeigenBilder();
             }
@@ -260,8 +269,11 @@ namespace AppBasic
 
         private void AnzeigenLeben()
         {
-            gegnerLeben.Text = "" + gegner.Hp + "/" + gegner.Maxhp;
-            spielerLeben.Text = "" + ausgewaehltesMonster.Hp + "/" + ausgewaehltesMonster.Maxhp;
+            RunOnUiThread(() =>
+            {
+                gegnerLeben.Text = "" + gegner.Hp + "/" + gegner.Maxhp;
+                spielerLeben.Text = "" + ausgewaehltesMonster.Hp + "/" + ausgewaehltesMonster.Maxhp;
+            });
         }
     }
 }

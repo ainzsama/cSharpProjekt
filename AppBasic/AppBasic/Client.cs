@@ -114,6 +114,7 @@ namespace AppBasic
 
         private void CheckMessage(string m)
         {
+            Console.WriteLine("Nachricht erhalten: " + m);
             string[] s = m.Split(new Char[] { Convert.ToChar(Protokoll.TRENN) });
 
             switch (s[0])
