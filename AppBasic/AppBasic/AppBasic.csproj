@@ -111,28 +111,24 @@
     <Compile Include="ActivityKampf.cs" />
     <Compile Include="ActivityMap.cs" />
     <Compile Include="ActivityUebersicht.cs" />
-    <Compile Include="Angriff.cs" />
     <Compile Include="AnimationSuchfeld.cs" />
     <Compile Include="AuswahlMonster.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Class2.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="DialogAnmeldung.cs" />
     <Compile Include="DialogAnzeigenMonsterbild.cs" />
     <Compile Include="DialogRegistrierung.cs" />
+    <Compile Include="GeteilteKlassen.cs" />
     <Compile Include="ListViewAdapterMonster.cs" />
-    <Compile Include="Logdaten.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Monster.cs" />
-    <Compile Include="Monsterart.cs" />
-    <Compile Include="MonsterUebertragung.cs" />
     <Compile Include="Protokoll.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SlidingTabScrollView.cs" />
     <Compile Include="SlidingTabStrip.cs" />
     <Compile Include="Spieler.cs" />
-    <Compile Include="SpielerUebertragung.cs" />
-    <Compile Include="Typ.cs" />
-    <Compile Include="Typen.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

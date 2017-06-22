@@ -25,6 +25,9 @@ using Android.Content.PM;
 using Android.Gms.Tasks;
 using Android.Support.V7.App;
 using AlertDialog = Android.Support.V7.App.AlertDialog;
+using System.Threading;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace AppBasic
 {
@@ -64,7 +67,7 @@ namespace AppBasic
 
 
             // Entgegennehmen Spieler
-            spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler"));
+            new Thread(() => { spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler")); }).Start();
             activeMonsters = new List<Monster>();
 
             _isGooglePlayServicesInstalled = IsGooglePlayServicesInstalled();
@@ -85,15 +88,20 @@ namespace AppBasic
             if (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Permission.Granted && ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessCoarseLocation) == Permission.Granted)
             {
                 Log.Debug("CheckPermissions", "Permissions ok");
-                SetUpMap();
+                new Thread(SetUpMap).Start(); ;
             }
             else
             {
                 Log.Debug("CheckPermissions", "Permissions nicht ok");
                 RequestPermissions(PermissionsLocation, RequestLocationId);
             }
-            EinlesenMonsterarten();
-            EinlesenAngriffe();
+
+
+            new Thread(() =>
+            {
+                monsterarten = EinlesenMonsterarten();
+                angriffe = EinlesenAngriffe();
+            }).Start();
         }
 
         private void OnClickUebersicht(object sender, EventArgs e)
@@ -102,7 +110,7 @@ namespace AppBasic
 
             //Übergabe Spieler
             actUebersicht.PutExtra("spieler", Intent.GetStringExtra("spieler"));
-            actUebersicht.PutExtra("monsterarten", Intent.GetStringExtra("monsterarten"));
+           
             StartActivity(actUebersicht);
         }
 
@@ -114,7 +122,7 @@ namespace AppBasic
                     {
                         if (grantResults[0] == Permission.Granted)
                         {
-                            SetUpMap();
+                            new Thread(SetUpMap).Start();
                             
                         }
                     }
@@ -136,7 +144,7 @@ namespace AppBasic
 
                     mMap.MoveCamera(CameraUpdateFactory.NewCameraPosition(camPos));
 
-                    if (activeMonsters.Count == 0) for (int i = 0; i < 5; i++) generateMonster();
+                    new Thread(() => { if (activeMonsters.Count == 0) for (int i = 0; i < 5; i++) generateMonster(); }).Start();
                 }
             }
         }
@@ -156,7 +164,7 @@ namespace AppBasic
                     {
                         mMap.Clear();
                         centerMap(location);
-                        for (int i = 0; i < 5; i++) generateMonster();
+                        new Thread(() => { for (int i = 0; i < 5; i++) generateMonster(); }).Start();
                         Log.Debug("LocationClient", "letzte position erhalten");
                     }
                 }
@@ -203,17 +211,20 @@ namespace AppBasic
             }
         }
 
-        private void EinlesenAngriffe()
+        private List<Monsterart> EinlesenMonsterarten()
         {
-            angriffe = new List<Angriff>();
-            angriffe.Add(Angriff.GetTestAngriff());
-            //einlesen aus XML
+            FileStream fs = new FileStream(Protokoll.GetPathArten(), FileMode.Open);
+            XmlSerializer xml = new XmlSerializer(typeof(List<Monsterart>));
+
+            return (List<Monsterart>)xml.Deserialize(fs);
         }
-        private void EinlesenMonsterarten()
+
+        private List<Angriff> EinlesenAngriffe()
         {
-            monsterarten = new List<Monsterart>();
-            monsterarten.Add(Monsterart.GetTestMonsterart());
-            //Lesen aus XML
+            FileStream fs = new FileStream(Protokoll.GetPathAngriffe(), FileMode.Open);
+            XmlSerializer xml = new XmlSerializer(typeof(List<Angriff>));
+
+            return (List<Angriff>)xml.Deserialize(fs);
         }
         private void generateMonster()
         {

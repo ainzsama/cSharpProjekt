@@ -65,7 +65,7 @@ namespace AppBasic
             
             angriff = FindViewById<Button>(Resource.Id.buttonAngriff);
             FindViewById<Button>(Resource.Id.buttonMonster).Click += delegate { MonsterWechseln(); };
-            FindViewById<Button>(Resource.Id.buttonFlucht).Click += delegate { Textanzeigen("Testtext", 100000); };//Beenden(); };
+            FindViewById<Button>(Resource.Id.buttonFlucht).Click += delegate { Beenden(); };
             
             ausgewaehltesMonster = spieler.Monster.ElementAt<Monster>(0);
             AnzeigenLeben();
@@ -148,8 +148,8 @@ namespace AppBasic
         {
             if (gegner.Verteidigen(ausgewaehltesMonster.Angriff))
             {
-                AnzeigenLeben();
                 Textanzeigen("Dein Monster greift an", 2000);
+                AnzeigenLeben();
                 
                 if (ausgewaehltesMonster.Verteidigen(gegner.Angriff))
                 {
@@ -254,7 +254,7 @@ namespace AppBasic
                 AnzeigenLeben();
                 AnzeigenBilder();
                 spieler.Typen = Typen.ErstelleTypen();
-                angriff.Click += angreifen;
+                angriff.Click += (e, f) => { new Thread(Angriff).Start(); };
                 AnzeigenLeben();
                 AnzeigenBilder();
             }

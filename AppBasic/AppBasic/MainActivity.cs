@@ -19,7 +19,7 @@ namespace AppBasic
 
 
         private Spieler spieler;
-        private List<Monsterart> monsterarten;
+        
 
         internal Spieler Spieler { get => spieler; set => spieler = value; }
 

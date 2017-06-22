@@ -14,6 +14,7 @@ using Android.Support.V4.View;
 using Newtonsoft.Json;
 using System.IO;
 using System.Xml.Serialization;
+using System.Threading;
 
 namespace AppBasic
 {
@@ -108,10 +109,13 @@ namespace AppBasic
         {
             var view = inflater.Inflate(Resource.Layout.FragMonsterLayout, container, false);
 
-            monsterarten = EinlesenMonsterarten();
-            angriffe = EinlesenAngriffe(); 
-            selected = monsterarten;
-            gefiltert = monsterarten;
+            new Thread(() => {
+                monsterarten = EinlesenMonsterarten();
+                angriffe = EinlesenAngriffe(); 
+                selected = monsterarten;
+                gefiltert = monsterarten;
+            }).Start();
+
             txtName = view.FindViewById<TextView>(Resource.Id.textViewNameUebersichtMonster);
             txtTyp = view.FindViewById<TextView>(Resource.Id.textViewTypUebersichtMonster);
             txtHp = view.FindViewById<TextView>(Resource.Id.textViewHpUebersichtMonster);
