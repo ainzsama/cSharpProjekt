@@ -87,7 +87,17 @@ namespace AppBasic
             
             DialogRegistrierung reg = new DialogRegistrierung();
             reg.Show(trans, "Registrierungsdialog");
-            reg.OnRegistrierungComplete += Anm_OnAnmeldungComplete;
+            reg.OnRegistrierungComplete += Reg_OnRegistrierungComplete; ;
+        }
+
+        private void Reg_OnRegistrierungComplete(object sender, OnRegistrierungEventArgs e)
+        {
+            FragmentTransaction trans = FragmentManager.BeginTransaction();
+            DialogAnmeldung anm = new DialogAnmeldung();
+            anm.OnAnmeldungComplete += Anm_OnAnmeldungComplete;
+            anm.Name = e.Name;
+            anm.Pwd = e.Pwd;
+            anm.Show(trans, "AnmeldeDialog");
         }
 
         private void OnBtnLoginClick(object sender, EventArgs e)

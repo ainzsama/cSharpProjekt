@@ -8,6 +8,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.IO;
 
 namespace AppBasic
 {
@@ -385,11 +386,21 @@ namespace AppBasic
         public const string ARTEN = "ARTEN";
         public const string ANGRIFFE = "ANGRIFFE";
         public const string TYPEN = "TYPEN";
+        public const string DATEN = "DATEN";
 
 
+        public static string GetPathArten()
+        {
+            return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "arten.xml");
+        }
 
-
+        public static string GetPathAngriffe()
+        {
+            return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "angriffe.xml");
+        }
     }
+
+
     public class SpielerUebertragung
     {
         private int spielerId;
@@ -428,6 +439,9 @@ namespace AppBasic
         private int id;
         private String name;
         private int starkgegen;
+
+        public Typ()
+        { }
         public Typ(int id, String name, int starkgegen)
         {
             Starkgegen = starkgegen;

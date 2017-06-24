@@ -113,8 +113,6 @@
     <Compile Include="ActivityUebersicht.cs" />
     <Compile Include="AnimationSuchfeld.cs" />
     <Compile Include="AuswahlMonster.cs" />
-    <Compile Include="Class1.cs" />
-    <Compile Include="Class2.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="DialogAnmeldung.cs" />
     <Compile Include="DialogAnzeigenMonsterbild.cs" />
@@ -123,7 +121,6 @@
     <Compile Include="ListViewAdapterMonster.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Monster.cs" />
-    <Compile Include="Protokoll.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SlidingTabScrollView.cs" />
@@ -131,9 +128,6 @@
     <Compile Include="Spieler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
-    <None Include="GettingStarted.Xamarin" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />

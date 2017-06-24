@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using System.IO;
+using System.Threading;
 
 namespace AppBasic
 {
@@ -21,10 +22,16 @@ namespace AppBasic
         private Button btnAnm;
         private Button btnCon;
         private TextView txtStatus;
-
+        private string name;
+        private string pwd;
         public event EventHandler<OnSingnUpEventArgs> OnAnmeldungComplete;
 
         private Client client;
+
+        public string Name { get => name; set => name = value; }
+        public string Pwd { get => pwd; set => pwd = value; }
+        public Client Client { get => client; set => client = value; }
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
@@ -34,38 +41,46 @@ namespace AppBasic
             etIp = view.FindViewById<EditText>(Resource.Id.editTextIp);
             etIp.Text = "192.168.178.97";
             etName = view.FindViewById<EditText>(Resource.Id.editTextName_AnmDialog);
-            etName.Text = "tester";
+            if (name != null) etName.Text = name;
+            else etName.Text = "tester";
+
             etPw = view.FindViewById<EditText>(Resource.Id.editTextPW_AnmDialog);
-            etPw.Text = "Test";
+
+            if (pwd != null) etPw.Text = pwd;
+            else etPw.Text = "Test";
+
             txtStatus = view.FindViewById<TextView>(Resource.Id.textViewStatus);
 
             //AnmeldeButton 
             btnAnm = view.FindViewById<Button>(Resource.Id.buttonLogIn);
             btnAnm.Enabled = false;
             btnAnm.Click += btnAnm_Click;
-            
+
             //VerbindungsButton
             //btnCon = view.FindViewById<Button>(Resource.Id.buttonVerbinden);
             //btnCon.Click += BtnCon_Click;
-            client = new Client(etIp.Text, 10000);
-            client.OnAnmeldung += Client_OnAnmeldung;
-            client.OnMessageRecieved += Client_OnMessage;
-            client.OnDatenComplete += Client_OnDatenComplete;
-            client.OnSpielerErhalten += Client_OnSpielerErhalten;
-            client.OnClientError += Client_OnClientError;
-            client.connect();
+           
+            Client = Client.GetInstance(etIp.Text, 10000);
+            Client.OnAnmeldung += Client_OnAnmeldung;
+            Client.OnMessageRecieved += Client_OnMessage;
+            Client.OnDatenComplete += Client_OnDatenComplete;
+            Client.OnSpielerErhalten += Client_OnSpielerErhalten;
+            Client.OnClientError += Client_OnClientError;
+            //Client.connect();
+            if (Client.IsConnected()) Client_OnAnmeldung(this, new OnAnmeldungEventArgs(true));
+          
             return view;
         }
 
         private void BtnCon_Click(object sender, EventArgs e)
         {
-            client = new Client(etIp.Text, 10000);
-            client.OnAnmeldung += Client_OnAnmeldung;
-            client.OnMessageRecieved += Client_OnMessage;
-            client.OnDatenComplete += Client_OnDatenComplete;
-            client.OnSpielerErhalten += Client_OnSpielerErhalten;
-            client.OnClientError += Client_OnClientError;
-            client.connect();
+            //Client = new Client(etIp.Text, 10000);
+            //Client.OnAnmeldung += Client_OnAnmeldung;
+            //Client.OnMessageRecieved += Client_OnMessage;
+            //Client.OnDatenComplete += Client_OnDatenComplete;
+            //Client.OnSpielerErhalten += Client_OnSpielerErhalten;
+            //Client.OnClientError += Client_OnClientError;
+            //Client.connect();
         }
 
         private void Client_OnClientError(object sender, OnClientErrorEventArgs e)
@@ -109,19 +124,22 @@ namespace AppBasic
             if (e.Erfolg)
             {
                 txtStatus.Text = "erfolgreich";
-                GetData();
                 if (!CheckData())
                 {
                     txtStatus.Text = "PruefeDaten";
-                    GetData();
+                    DeleteData();
                 }
-            
-                else btnAnm.Enabled = true;
+                GetData();
                 btnAnm.Enabled = true;
             }
             else txtStatus.Text = "Fehler";
         }
 
+        private void DeleteData()
+        {
+            File.Delete(Protokoll.GetPathArten());
+            File.Delete(Protokoll.GetPathAngriffe());
+        }
         private bool CheckData()
         {
             bool vorhanden = true;
@@ -135,12 +153,12 @@ namespace AppBasic
 
         private void GetData()
         {
-            client.ErfrageDaten();
+            Client.ErfrageDaten();
         }
 
         private void btnAnm_Click(object sender, EventArgs e)
         {
-            client.sendMessage(Protokoll.ANMELDUNG + Protokoll.TRENN + etName.Text + Protokoll.TRENN + etPw.Text);
+            Client.sendMessage(Protokoll.ANMELDUNG + Protokoll.TRENN + etName.Text + Protokoll.TRENN + etPw.Text);
         }
 
         public override void OnActivityCreated(Bundle savedInstanceState)

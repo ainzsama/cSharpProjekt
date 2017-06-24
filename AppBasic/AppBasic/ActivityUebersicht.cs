@@ -36,12 +36,6 @@ namespace AppBasic
  
             mViewPager.Adapter = new MyPagerAdapter(SupportFragmentManager);
             mScrollView.ViewPager = mViewPager;
-            
-            //Entgegennehmen Spieler
-            //spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler"));
-        
-            
-
         }
 
 
@@ -53,10 +47,7 @@ namespace AppBasic
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-           
-                return base.OnOptionsItemSelected(item);
-               
-           
+            return base.OnOptionsItemSelected(item); 
         }
 
     }
@@ -144,7 +135,9 @@ namespace AppBasic
             FileStream fs = new FileStream(Protokoll.GetPathArten(), FileMode.Open);
             XmlSerializer xml = new XmlSerializer(typeof(List<Monsterart>));
 
-            return (List<Monsterart>)xml.Deserialize(fs);
+            List<Monsterart> lm = (List<Monsterart>)xml.Deserialize(fs);
+            fs.Close();
+            return lm;
         }
 
         private List<Angriff> EinlesenAngriffe()
@@ -152,7 +145,9 @@ namespace AppBasic
             FileStream fs = new FileStream(Protokoll.GetPathAngriffe(), FileMode.Open);
             XmlSerializer xml = new XmlSerializer(typeof(List<Angriff>));
 
-            return (List<Angriff>)xml.Deserialize(fs);
+            List<Angriff> la = (List<Angriff>)xml.Deserialize(fs);
+            fs.Close();
+            return la;
         }
         private void TxtStarkGegen_Click(object sender, EventArgs e)
         {
@@ -279,7 +274,7 @@ namespace AppBasic
         private void fuelleFelder()
         {
             tvName.Text = spieler.Name;
-            tvSpielzeit.Text = spieler.Logdaten.Spielzeit.ToString();
+            
             tvKaempfeGes.Text = spieler.Logdaten.KaempfeGesamt.ToString();
             tvKaempfeGew.Text = spieler.Logdaten.KaempfeGewonnen.ToString();
         }

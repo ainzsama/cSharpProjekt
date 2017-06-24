@@ -15,20 +15,22 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Xml.Serialization;
 using System.Threading;
+using Android.Util;
 
 namespace AppBasic
 {
-    class Client
+    public class Client
     {
+        private static Client instance;
         private TcpClient client;
         private NetworkStream stream;
         private string ip;
         private int port;
         private string pathArten;
         private string pathAngriffe;
-
+        private bool angriffeComplete;
+        private bool artenComplete;
         private Thread listenThread;
-        private Thread sendThread;
 
         public event EventHandler<OnAnmeldungEventArgs> OnAnmeldung;
         public event EventHandler<OnMessageReceivedEventArgs> OnMessageRecieved;
@@ -41,17 +43,28 @@ namespace AppBasic
             connect();
         }
 
+        public static Client GetInstance(string ip, int port)
+        {
+            if (instance == null) instance = new Client(ip, port);
+            return instance;
+        }
         public Client(string ip, int port)
         {
             this.ip = ip;
             this.port = port;
+            angriffeComplete = false;
+            artenComplete = false;
             pathArten = Protokoll.GetPathArten();
             pathAngriffe = Protokoll.GetPathAngriffe();
+            connect();
         }
 
+        public bool IsConnected()
+        {
+            return client.Connected;
+        }
         public void connect()
         {
-            //Console.WriteLine("[Try to connect to server...]");
             client = new TcpClient();
             IPEndPoint ipEnd = new IPEndPoint(IPAddress.Parse(ip), 10000);
             try
@@ -59,105 +72,141 @@ namespace AppBasic
                 client.Connect(ipEnd);
                 if (client.Connected)
                 {
-                    //Console.WriteLine("[Connected]");
-                    OnAnmeldung.Invoke(this, new OnAnmeldungEventArgs(true));
                     stream = client.GetStream();
                     listenThread = new Thread(new ThreadStart(receivedMessage));
                     listenThread.Start();
+                    OnAnmeldung.Invoke(this, new OnAnmeldungEventArgs(true));
 
                 }
                 else
                 {
-                    //Console.WriteLine("[Failed connection]");
                     OnAnmeldung.Invoke(this, new OnAnmeldungEventArgs(false));
 
                 }
             }
             catch (Exception ex)
             {
-                //Console.WriteLine("[connectioin error: " + ex.Message.ToString() + "]");
+               
 
             }
 
         }
         public void sendMessage(string m)
         {
-            sendThread = new Thread(SendMessageInThread);
-            sendThread.Start(m);
+            //sendThread = new Thread(SendMessageInThread);
+            //sendThread.Start(m);
+            SendMessageInThread(m);
             
         }
 
         private void SendMessageInThread(object input)
         {
             String m = (string)input;
-            Console.WriteLine("Zu versendende Nachricht: " + m);
+            Log.Debug("SendMessageInThread", "Zu versendende Nachricht: " + m);
             byte[] message = Encoding.Unicode.GetBytes(m);
             stream.Write(message, 0, message.Length);
-            Console.WriteLine("Nachricht verschickt: " + m);
-            //receivedMessage();
+            Log.Debug("SendMessageInThread", "Nachricht verschickt: " + m);
+            new Thread(receivedMessage).Start();
         }
         private void receivedMessage()
         {
-           
+            Log.Debug("ReceivedMessage", "Nachricht erhalten");
             byte[] buffer = new byte[client.ReceiveBufferSize];
             int data = stream.Read(buffer, 0, client.ReceiveBufferSize);
             string message = Encoding.Unicode.GetString(buffer, 0, data);
-
-            //OnMessageRecieved.Invoke(this, new OnMessageReceivedEventArgs(message));
+            Log.Debug("ReceivedMessage", "Nachricht erhalten: " + message);
             CheckMessage(message);
-
-
-            Console.WriteLine(message);
-
-            
         }
 
         private void CheckMessage(string m)
         {
-            Console.WriteLine("Nachricht erhalten: " + m);
+            Log.Debug("Debug", "Nachricht erhalten: " + m);
             string[] s = m.Split(new Char[] { Convert.ToChar(Protokoll.TRENN) });
 
             switch (s[0])
             {
                 case Protokoll.SPIELER:
-                    Console.WriteLine("Spieler erhalten");
-                    HerstellenSpieler(s[1]);
+                    Log.Debug("CheckMessage", "Spieler erhalten...");
+                    EmpfangeSpieler(s[1]);
                     break;
                 case Protokoll.ERROR:
-                    Console.WriteLine("Fehler aufgetreten" + s[1]);
+                    Log.Debug("CheckMessage", "Error erhalten...");
                     //Fehler aufgetreten
                     break;
                 case Protokoll.ARTEN:
+                    Log.Debug("CheckMessage", "Arten erhalten...");
                     ErstelleArtenDatei(s[1]);
                     break;
                 case Protokoll.ANGRIFFE:
+                    Log.Debug("CheckMessage", "Angriffe erhalten...");
                     ErstelleAngriffeDatei(s[1]);
                     break;
                 case Protokoll.REGISTRIERUNG:
-                    if (s[1].Equals("erfolgrreich"))
+                    if (s[1].Equals("erfolgreich"))
                         OnRegistVersucht.Invoke(this, new OnRegistVersuchtEventArgs(true, null));
                     else OnRegistVersucht.Invoke(this, new OnRegistVersuchtEventArgs(false, s[2]));
+                    break;
+                case Protokoll.DATEN:
+                    Log.Debug("CheckMessage", "Daten erhalten...");
+                    ErstelleArtenDatei(s[1]);
+                    ErstelleAngriffeDatei(s[2]);
+                    Log.Debug("CheckMessage", "Dateien erstellt...");
+                    break;
+                case Protokoll.ANMELDUNG:
+                    Log.Debug("CheckMessage", "Anmeldung erfolgt, warte auf Spieler...");
                     break;
                 default:
                     OnClientError.Invoke(this, new OnClientErrorEventArgs(m));
                     break;
             }
         }
-        public void HerstellenSpieler(string m)
+        public void EmpfangeSpieler(string m)
         {
-            Console.WriteLine("HerstellenSpieler: " + m);
-            Spieler s = JsonConvert.DeserializeObject<Spieler>(m);
-            Console.WriteLine("Hergestelleter Spieler: " + s.Name);
+            Log.Debug("EmpfangeSpieler", "Spieler empfangen...");
+            Spieler s = HerstellenSpieler(JsonConvert.DeserializeObject<SpielerUebertragung>(m));
             sendMessage(Protokoll.ABMELDUNG);
-            client.Close();
             OnSpielerErhalten.Invoke(this, new OnSpielerErhaltenEventArgs(s));
 
         }
+
+        private Spieler HerstellenSpieler(SpielerUebertragung su)
+        {
+            Log.Debug("HerstellenSpieler", "Spieler herstellen...");
+            Spieler s = new Spieler();
+
+            s.Logdaten = su.Logdaten;
+            s.Name = su.Name;
+            s.SpielerId = su.SpielerId;
+            s.Monster = HerstellenMonster(su.Monster);
+
+            return s;
+        }
+
+        private List<Monster> HerstellenMonster(List<MonsterUebertragung> mul)
+        {
+            Log.Debug("HerstellenMonster", "Monster herstellen...");
+            List<Monster> ml = new List<Monster>();
+
+            foreach(MonsterUebertragung mu in mul)
+            {
+                Monster m = new Monster();
+                m.Angriff = mu.Angriff;
+                m.Art = mu.Art;
+                m.BenoetigteXp = mu.BenoetigteXp;
+                m.Hp = mu.Hp;
+                m.Lvl = mu.Lvl;
+                m.Maxhp = mu.Maxhp;
+                m.MonsterId = mu.MonsterId;
+                m.Nickname = mu.Nickname;
+                m.Xp = mu.Xp;
+
+                ml.Add(m);
+            }
+            return ml;
+        }
         public void ErfrageDaten()
         {
-            Console.WriteLine("Erfrage Arten");
-            sendMessage(Protokoll.ARTEN + Protokoll.TRENN);
-            sendMessage(Protokoll.ANGRIFFE + Protokoll.TRENN);
+            sendMessage(Protokoll.DATEN + Protokoll.TRENN);
 
             //OnDatenComplete.Invoke(this, new OnDatenCompleteEventArgs());
         }
@@ -168,7 +217,7 @@ namespace AppBasic
             FileStream fs = new FileStream(pathArten, FileMode.Create);
             XmlSerializer xml = new XmlSerializer(typeof(List<Monsterart>));
             xml.Serialize(fs, arten);
-            OnDatenComplete.Invoke(this, new OnDatenCompleteEventArgs());
+            if (angriffeComplete) OnDatenComplete.Invoke(this, new OnDatenCompleteEventArgs());
 
         }
 
@@ -178,8 +227,8 @@ namespace AppBasic
             FileStream fs = new FileStream(pathAngriffe, FileMode.Create);
             XmlSerializer xml = new XmlSerializer(typeof(List<Angriff>));
             xml.Serialize(fs, angriffe);
-            Console.WriteLine("Angriffe erstellt");
-            OnDatenComplete.Invoke(this, new OnDatenCompleteEventArgs());
+            angriffeComplete = true;
+            if(artenComplete) OnDatenComplete.Invoke(this, new OnDatenCompleteEventArgs());
 
         }
     }

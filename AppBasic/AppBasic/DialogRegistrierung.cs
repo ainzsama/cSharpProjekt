@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.Threading;
 
 namespace AppBasic
 {
@@ -22,9 +23,11 @@ namespace AppBasic
         private Button btnCon;
         private TextView txtStatus;
 
-        public event EventHandler<OnSingnUpEventArgs> OnRegistrierungComplete;
+        public event EventHandler<OnRegistrierungEventArgs> OnRegistrierungComplete;
 
         private Client client;
+
+        public Client Client { get => client; set => client = value; }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -44,30 +47,39 @@ namespace AppBasic
 
             //RegistrierungsButton
             btnReg = view.FindViewById<Button>(Resource.Id.buttonReg);
-            btnReg.Enabled = false;
+            btnReg.Enabled = true;
             btnReg.Click += BtnReg_Click;
 
-            
 
+            
+            Client =  Client.GetInstance(etIp.Text, 10000);
+            Client.OnAnmeldung += Client_OnAnmeldung;
+            Client.OnMessageRecieved += Client_OnMessage;
+            Client.OnRegistVersucht += Client_OnRegistVersucht;
+           
             return view;
         }
 
         private void BtnReg_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            Client.sendMessage(Protokoll.REGISTRIERUNG + Protokoll.TRENN + etName.Text + Protokoll.TRENN + etPw.Text);
         }
 
         private void BtnCon_Click(object sender, EventArgs e)
         {
-            client = new Client(etIp.Text, 10000);
-            client.OnAnmeldung += Client_OnAnmeldung;
-            client.OnMessageRecieved += Client_OnMessage;
-            client.OnRegistVersucht += Client_OnRegistVersucht;
+            //(etIp.Text, 10000);
+            //client.OnAnmeldung += Client_OnAnmeldung;
+            //client.OnMessageRecieved += Client_OnMessage;
+            //client.OnRegistVersucht += Client_OnRegistVersucht;
         }
 
         private void Client_OnRegistVersucht(object sender, OnRegistVersuchtEventArgs e)
         {
-            if (e.Erfolg) txtStatus.Text = "Registrierung erfolgreich, bitte Anmeldedialog starten";
+            if (e.Erfolg)
+            {
+                //txtStatus.Text = "Registrierung erfolgreich, bitte Anmeldedialog starten";
+                OnRegistrierungComplete.Invoke(this, new OnRegistrierungEventArgs(etName.Text, etPw.Text, Client));
+            }
             else txtStatus.Text = "Fehler;  " + e.Fehler;
         }
 
@@ -75,6 +87,7 @@ namespace AppBasic
         {
             txtStatus.Text = e.Message;
         }
+
 
         private void Client_OnAnmeldung(object sender, OnAnmeldungEventArgs e)
         {
@@ -92,5 +105,21 @@ namespace AppBasic
             Dialog.Window.Attributes.WindowAnimations = Resource.Style.dialogAnimation;
         }
 
+    }
+
+    public class OnRegistrierungEventArgs : EventArgs
+    {
+        private string name;
+        private string pwd;
+
+
+        public OnRegistrierungEventArgs(string name, string pwd, Client client) : base()
+        {
+            Name = name;
+            Pwd = pwd;
+        }
+
+        public string Name { get => name; set => name = value; }
+        public string Pwd { get => pwd; set => pwd = value; }
     }
 }

@@ -40,19 +40,14 @@ namespace AppBasic
 
         private GoogleApiClient apiClient;
         private LocationRequest locRequest;
-
         private GoogleMap mMap;
-
-
         private Spieler spieler;
-        private Button btnUebersicht;
-
-        private bool _isGooglePlayServicesInstalled;
-
         private List<Monster> activeMonsters;
-
+        private bool _isGooglePlayServicesInstalled;
         private List<Monsterart> monsterarten;
         private List<Angriff> angriffe;
+        private bool requestingLocationUpdates;
+        private Button btnUebersicht;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -67,16 +62,35 @@ namespace AppBasic
 
 
             // Entgegennehmen Spieler
-            new Thread(() => { spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler")); }).Start();
+            spieler = JsonConvert.DeserializeObject<Spieler>(Intent.GetStringExtra("spieler"));
             activeMonsters = new List<Monster>();
-
+            requestingLocationUpdates = false;
+            SetUpMap();
             _isGooglePlayServicesInstalled = IsGooglePlayServicesInstalled();
+
+            //RequestPermissions(PermissionsLocation, RequestLocationId);
+            if (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Permission.Granted && ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessCoarseLocation) == Permission.Granted)
+            {
+                Log.Debug("OnCreate", "Permissions ok, ");
+            }
+            else
+            {
+                Log.Debug("OnCreate", "Permissions not ok, requesting...");
+                RequestPermissions(PermissionsLocation, RequestLocationId);
+            }
 
             if (_isGooglePlayServicesInstalled)
             {
-                apiClient = new GoogleApiClient.Builder(this, this, this).AddApi(LocationServices.API).Build();
-                locRequest = new LocationRequest();
+                Log.Debug("OnCreate", "Build ApiClient and connect...");
+                apiClient = BuildApiClient();
                 apiClient.Connect();
+                try
+                {
+                    CreateLocationRequest();
+                }catch
+                {
+
+                }
             }
             else
             {
@@ -84,24 +98,66 @@ namespace AppBasic
                 Toast.MakeText(this, "Google Play Services nicht installiert", ToastLength.Long).Show();
 
             }
-            //RequestPermissions(PermissionsLocation, RequestLocationId);
-            if (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == Permission.Granted && ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessCoarseLocation) == Permission.Granted)
-            {
-                Log.Debug("CheckPermissions", "Permissions ok");
-                new Thread(SetUpMap).Start(); ;
-            }
-            else
-            {
-                Log.Debug("CheckPermissions", "Permissions nicht ok");
-                RequestPermissions(PermissionsLocation, RequestLocationId);
-            }
 
 
-            new Thread(() =>
+             monsterarten = EinlesenMonsterarten();
+             angriffe = EinlesenAngriffe();
+
+        }
+
+        private GoogleApiClient BuildApiClient()
+        {
+            GoogleApiClient client = new GoogleApiClient.Builder(this, this, this)
+                .AddApi(LocationServices.API)
+                .AddConnectionCallbacks(this)
+                .AddOnConnectionFailedListener(this)
+                .Build();
+
+            return client;
+        }
+
+        private void CreateLocationRequest()
+        {
+            locRequest = new LocationRequest();
+            locRequest.SetInterval(5000);
+            locRequest.SetFastestInterval(4000);
+            locRequest.SetPriority(LocationRequest.PriorityHighAccuracy);
+        }
+
+        protected async void StartLocationUpdates()
+        {
+            if (!requestingLocationUpdates)
             {
-                monsterarten = EinlesenMonsterarten();
-                angriffe = EinlesenAngriffe();
-            }).Start();
+                if (locRequest == null) CreateLocationRequest();
+
+                if (apiClient.IsConnected && locRequest != null)
+                {
+                    try
+                    {
+
+                        await LocationServices.FusedLocationApi.RequestLocationUpdates(apiClient, locRequest, this);
+                        requestingLocationUpdates = true;
+                    } catch
+                    {
+                        Log.Debug("StartLocationUpdates", "permissions not available, requesting now...");
+                        requestingLocationUpdates = false;
+                        RequestPermissions(PermissionsLocation, RequestLocationId);
+                    }
+                }
+
+                else
+                {
+                    if (apiClient == null) apiClient = BuildApiClient();
+                    if (!apiClient.IsConnected && !apiClient.IsConnecting) apiClient.Connect();
+                   
+                }
+            }
+            else Log.Debug("StartLocationUpdates", "Allready requesting location updates...");
+        }
+
+        protected async void  StopLocationUpdates()
+        {
+            await LocationServices.FusedLocationApi.RemoveLocationUpdates(apiClient, this);
         }
 
         private void OnClickUebersicht(object sender, EventArgs e)
@@ -122,8 +178,8 @@ namespace AppBasic
                     {
                         if (grantResults[0] == Permission.Granted)
                         {
-                            new Thread(SetUpMap).Start();
-                            
+                            SetUpMap();
+                            StartLocationUpdates();
                         }
                     }
                     break;
@@ -133,9 +189,10 @@ namespace AppBasic
 
         private void centerMap(Location loc)
         {
+            Log.Debug("CenterMap", "CenterMap called...");
             if (mMap != null)
             {
-                if(loc != null)
+                if (loc != null)
                 {
                     CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
                     builder.Target(new LatLng(loc.Latitude, loc.Longitude));
@@ -147,31 +204,39 @@ namespace AppBasic
                     new Thread(() => { if (activeMonsters.Count == 0) for (int i = 0; i < 5; i++) generateMonster(); }).Start();
                 }
             }
+            else Log.Debug("CenterMap", "Map is null...");
         }
+
         protected override void OnResume()
         {
             base.OnResume();
-            Log.Debug("OnResume", "OnResume called, connecting to client...");
-
-            apiClient.Connect();
-            if (apiClient.IsConnected)
+            Log.Debug("OnResume", "OnResume called...");
+            if (mMap == null)
             {
-                Location location = LocationServices.FusedLocationApi.GetLastLocation(apiClient);
-                
-                if (location != null)
-                {
-                    if (mMap != null)
-                    {
-                        mMap.Clear();
-                        centerMap(location);
-                        new Thread(() => { for (int i = 0; i < 5; i++) generateMonster(); }).Start();
-                        Log.Debug("LocationClient", "letzte position erhalten");
-                    }
-                }
-                else Log.Debug("LocationClient", "Position nicht erhalten");
+                Log.Debug("OnResume", "Map is null, start SetUpMap...");
             }
-            else Log.Debug("LocationClient", "warte auf client verbindung");
-
+            else
+            {
+                Log.Debug("OnResume", "Map not null...");
+                if (apiClient == null)
+                {
+                    Log.Debug("OnResume", "Client is null, building now...");
+                    apiClient = BuildApiClient();
+                }
+                else Log.Debug("OnResume", "ApiClient not null...");
+                if (!apiClient.IsConnected)
+                {
+                    Log.Debug("OnResume", "Client is not connected, connecting now...");
+                    apiClient.Connect();
+                }
+                else Log.Debug("OnResume", "ApiClient is connected...");
+                if (!requestingLocationUpdates)
+                {
+                    Log.Debug("OnResume", "Begin location updates...");
+                    StartLocationUpdates();
+                }
+                else Log.Debug("OnResume", "Allready requesting locatin updates...");
+            }
         }
 
         private void SetUpMap()
@@ -193,38 +258,72 @@ namespace AppBasic
 
         public void OnMapReady(GoogleMap googleMap)
         {
+            Log.Debug("OnMapReady", "Map returned, initializing...");
             mMap = googleMap;
             mMap.UiSettings.CompassEnabled = true;
             mMap.SetInfoWindowAdapter(this);
             mMap.SetOnInfoWindowClickListener(this);
-           
             try
             {
                 mMap.MyLocationEnabled = true;
                 mMap.UiSettings.MyLocationButtonEnabled = true;
-                centerMap(LocationServices.FusedLocationApi.GetLastLocation(apiClient));
-
             }
             catch
             {
+                Log.Debug("OnMapReady", "Permissions required, requestoing now...");
                 RequestPermissions(PermissionsLocation, RequestLocationId);
             }
+            if (apiClient == null)
+            {
+                Log.Debug("OnResume", "Client is null, building now...");
+                apiClient = BuildApiClient();
+            }
+            else Log.Debug("OnResume", "ApiClient not null...");
+            if (!apiClient.IsConnected)
+            {
+                Log.Debug("OnResume", "Client is not connected, connecting now...");
+                apiClient.Connect();
+            }
+            else Log.Debug("OnResume", "ApiClient is connected...");
+            if (!requestingLocationUpdates)
+            {
+                Log.Debug("OnResume", "Begin location updates...");
+                StartLocationUpdates();
+            }
+            else Log.Debug("OnResume", "Allready requesting locatin updates...");
         }
 
         private List<Monsterart> EinlesenMonsterarten()
         {
-            FileStream fs = new FileStream(Protokoll.GetPathArten(), FileMode.Open);
-            XmlSerializer xml = new XmlSerializer(typeof(List<Monsterart>));
+            try
+            {
+                FileStream fs = new FileStream(Protokoll.GetPathArten(), FileMode.Open);
+                XmlSerializer xml = new XmlSerializer(typeof(List<Monsterart>));
+                List<Monsterart> lm = (List<Monsterart>)xml.Deserialize(fs);
+                fs.Close();
+                return lm;
+            }catch(Exception e)
+            {
+                Log.Debug("ActMap Arten", e.StackTrace);
+            }
 
-            return (List<Monsterart>)xml.Deserialize(fs);
+            return null;
         }
 
         private List<Angriff> EinlesenAngriffe()
         {
-            FileStream fs = new FileStream(Protokoll.GetPathAngriffe(), FileMode.Open);
-            XmlSerializer xml = new XmlSerializer(typeof(List<Angriff>));
-
-            return (List<Angriff>)xml.Deserialize(fs);
+            try
+            {
+                FileStream fs = new FileStream(Protokoll.GetPathAngriffe(), FileMode.Open);
+                XmlSerializer xml = new XmlSerializer(typeof(List<Angriff>));
+                List<Angriff> la = (List<Angriff>)xml.Deserialize(fs);
+                fs.Close();
+                return la;
+            }catch(Exception e)
+            {
+                Log.Debug("ActMap", e.StackTrace);
+            }
+            return null;
         }
         private void generateMonster()
         {
@@ -234,16 +333,15 @@ namespace AppBasic
             //opt.Icon = GetMonsterIcon();
             opt.SetPosition(GetRandomLatLng());
 
-            m.Marker = mMap.AddMarker(opt);
+            RunOnUiThread(() => { m.Marker = mMap.AddMarker(opt); });
             activeMonsters.Add(m);
 
         }
         public void OnConnected(Bundle connectionHint)
         {
             Log.Info("LocationClient", "Now connected to client");
-            Location loc = LocationServices.FusedLocationApi.GetLastLocation(apiClient);
-           
-            if (loc != null)centerMap(loc);
+            if (locRequest == null) CreateLocationRequest();
+            StartLocationUpdates();
         }
 
         private Monster GetRandomMonster()
@@ -285,21 +383,48 @@ namespace AppBasic
 
             return new LatLng(lat, lng);
         }
+
+        private void CheckProximity(object loc)
+        {
+            Location temp = new Location(LocationManager.GpsProvider);
+        
+            foreach (Monster m in activeMonsters)
+            {
+                temp.Latitude = m.Marker.Position.Latitude;
+                temp.Longitude = m.Marker.Position.Longitude;
+                if (temp.DistanceTo((Location)loc) < 5)
+                {
+                    starteKampf(m);
+                    break;
+                }
+            }
+        }
         public void OnConnectionSuspended(int cause)
         {
             
         }
 
+        protected override void OnPause()
+        {
+            base.OnPause();
+            if (requestingLocationUpdates)
+            {
+                requestingLocationUpdates = false;
+                StopLocationUpdates();
+            }
+        }
         public void OnConnectionFailed(ConnectionResult result)
         {
-            Log.Info("LocationClient", "Connection failed, attempting to reach google play services"); throw new NotImplementedException();
+            Log.Debug("LocationClient", "Connection failed, attempting to reach google play services");
+            apiClient.Connect();
         }
 
         public void OnLocationChanged(Location location)
         {
             
             centerMap(location);
-            Log.Debug("LocationClient", "Location updated");
+            Log.Debug("LocationClient", "Location updated, new location is: " + location.Latitude.ToString() + ", checking proximity");
+            CheckProximity(location);
 
         }
 
