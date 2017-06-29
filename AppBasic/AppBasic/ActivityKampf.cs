@@ -48,10 +48,7 @@ namespace AppBasic
             gegner = JsonConvert.DeserializeObject<Monster>(Intent.GetStringExtra("gegner"));
             spieler.Monster.Add(Monster.GetTestMonster());
            
-            /*spieler = new Spieler();
-            spieler.Monster = new List<Monster>();
-            spieler.Monster.Add(Monster.GetTestMonster());
-            gegner = Monster.GetTestMonster();*/
+
 
             // Create your application here
             hauptlayout = FindViewById<LinearLayout>(Resource.Id.linearLayout1);

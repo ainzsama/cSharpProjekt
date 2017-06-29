@@ -370,10 +370,11 @@ namespace AppBasic
             }
 
             set
-            {
+            { 
                 benoetigteXp = value;
             }
         }
+            
     }
     public class Protokoll
     {
@@ -387,7 +388,7 @@ namespace AppBasic
         public const string ANGRIFFE = "ANGRIFFE";
         public const string TYPEN = "TYPEN";
         public const string DATEN = "DATEN";
-
+        public const string IP = "192.168.43.74";
 
         public static string GetPathArten()
         {

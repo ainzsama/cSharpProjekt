@@ -24,4 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/buttonStarteTestKampf" />
+    <Button
+        android:text="Abmelden"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonAbmeldenMain" />
 </LinearLayout>

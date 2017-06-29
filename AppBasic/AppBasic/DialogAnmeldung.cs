@@ -39,7 +39,7 @@ namespace AppBasic
             var view = inflater.Inflate(Resource.Layout.AnmeldungLayout, container, false);
 
             etIp = view.FindViewById<EditText>(Resource.Id.editTextIp);
-            etIp.Text = "192.168.178.97";
+            etIp.Text = Protokoll.IP;
             etName = view.FindViewById<EditText>(Resource.Id.editTextName_AnmDialog);
             if (name != null) etName.Text = name;
             else etName.Text = "tester";
@@ -90,9 +90,11 @@ namespace AppBasic
 
         private void Client_OnSpielerErhalten(object sender, OnSpielerErhaltenEventArgs e)
         {
-           ChangeStatusText("Spieler erhalten");
+            ChangeStatusText("Spieler erhalten");
             
-           OnAnmeldungComplete.Invoke(this, new OnSingnUpEventArgs(e.Spieler.Name, e.Spieler));
+            OnAnmeldungComplete.Invoke(this, new OnSingnUpEventArgs(e.Spieler.Name, e.Spieler));
+
+            this.DismissAllowingStateLoss();
         }
 
         private void Client_OnDatenComplete(object sender, OnDatenCompleteEventArgs e)

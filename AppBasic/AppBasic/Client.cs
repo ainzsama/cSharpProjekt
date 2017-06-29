@@ -38,6 +38,8 @@ namespace AppBasic
         public event EventHandler<OnSpielerErhaltenEventArgs> OnSpielerErhalten;
         public event EventHandler<OnClientErrorEventArgs> OnClientError;
         public event EventHandler<OnRegistVersuchtEventArgs> OnRegistVersucht;
+        public event EventHandler<EventArgs> OnAbmeldungComplete;
+        
         public Client()
         {
             connect();
@@ -155,6 +157,11 @@ namespace AppBasic
                 case Protokoll.ANMELDUNG:
                     Log.Debug("CheckMessage", "Anmeldung erfolgt, warte auf Spieler...");
                     break;
+                case Protokoll.ABMELDUNG:
+                    Log.Debug("CheckMessage", "Abmeldung erfolgt...");
+                    OnAbmeldungComplete.Invoke(this, new EventArgs());
+                    
+                    break;
                 default:
                     OnClientError.Invoke(this, new OnClientErrorEventArgs(m));
                     break;
@@ -164,7 +171,7 @@ namespace AppBasic
         {
             Log.Debug("EmpfangeSpieler", "Spieler empfangen...");
             Spieler s = HerstellenSpieler(JsonConvert.DeserializeObject<SpielerUebertragung>(m));
-            sendMessage(Protokoll.ABMELDUNG);
+            
             OnSpielerErhalten.Invoke(this, new OnSpielerErhaltenEventArgs(s));
 
         }

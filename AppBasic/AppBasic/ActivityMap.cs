@@ -176,18 +176,23 @@ namespace AppBasic
             {
                 case (RequestLocationId):
                     {
-                        if (grantResults[0] == Permission.Granted)
+                        try
                         {
-                            SetUpMap();
-                            StartLocationUpdates();
+                            if (grantResults[0] == Permission.Granted)
+                            {
+                                SetUpMap();
+                                StartLocationUpdates();
+                            }
                         }
+                        catch (Exception)
+                        { }
                     }
                     break;
             }
 
         }
 
-        private void centerMap(Location loc)
+        private void CenterMap(Location loc)
         {
             Log.Debug("CenterMap", "CenterMap called...");
             if (mMap != null)
@@ -196,7 +201,7 @@ namespace AppBasic
                 {
                     CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
                     builder.Target(new LatLng(loc.Latitude, loc.Longitude));
-                    builder.Zoom(17);
+                    builder.Zoom(15);
                     CameraPosition camPos = builder.Build();
 
                     mMap.MoveCamera(CameraUpdateFactory.NewCameraPosition(camPos));
@@ -375,8 +380,8 @@ namespace AppBasic
            
             r = new Random();
             if (r.Next(0, 10) > 5)
-                lat = loc.Latitude + (offsetLat / 10000.0);
-            else lat = loc.Latitude - (offsetLat / 10000.0);
+                lat = loc.Latitude + (offsetLat / 100000.0);
+            else lat = loc.Latitude - (offsetLat / 100000.0);
 
             if (r.Next(0, 10) > 5) lng = loc.Longitude + (offsetLng / 10000.0);
             else lng = loc.Longitude - (offsetLng / 10000.0);
@@ -422,7 +427,7 @@ namespace AppBasic
         public void OnLocationChanged(Location location)
         {
             
-            centerMap(location);
+            CenterMap(location);
             Log.Debug("LocationClient", "Location updated, new location is: " + location.Latitude.ToString() + ", checking proximity");
             CheckProximity(location);
 
@@ -444,7 +449,7 @@ namespace AppBasic
             {
                 if(m.Marker.Equals(marker))
                 {
-                    bild.SetImageResource(m.Art.Pic);
+                    bild.SetImageResource(Resource.Drawable.monster2);
                     name.Text = m.Nickname;
                     hp.Text = m.Maxhp.ToString();
                     atk.Text = m.Angriff.Name;

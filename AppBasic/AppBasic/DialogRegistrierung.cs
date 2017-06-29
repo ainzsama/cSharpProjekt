@@ -36,6 +36,7 @@ namespace AppBasic
             var view = inflater.Inflate(Resource.Layout.RegistrierungLayout, container, false);
 
             etIp = view.FindViewById<EditText>(Resource.Id.editTextIpReg);
+            etIp.Text = Protokoll.IP;
             etName = view.FindViewById<EditText>(Resource.Id.editTextName_RegDialog);
             etPw = view.FindViewById<EditText>(Resource.Id.editTextPW_RegDialog);
             etPwConf = view.FindViewById<EditText>(Resource.Id.editTextPwConfirm_RegDialog);
